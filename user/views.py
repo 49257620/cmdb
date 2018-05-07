@@ -14,4 +14,8 @@ def index(request):
         'users': users.items()
     })
 
+
+def login(request):
+    return render(request, 'user/login.html')
+
 # Create your views here.

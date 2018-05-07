@@ -1,30 +1,194 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>表格</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CMDB | User</title>
+
+    <link href="/static/user/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/user/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/user/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/user/css/animate.css" rel="stylesheet">
+    <link href="/static/user/css/style.css" rel="stylesheet">
+
 </head>
-<body>
-    当前时间为：{{ current_time }}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>姓名</th>
-                <th>年龄</th>
-                <th>电话</th>
-            </tr>
-        </thead>
-        <tbody>
-        {%  for item in users  %}
-            <tr>
-                <td>{{ item.0 }}</td>
-                <td>{{ item.1.name }}</td>
-                <td>{{ item.1.age }}</td>
-                <td>{{ item.1.tel }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+<body style="background: #f3f3f4">
+
+    <div id="wrapper" >
+
+
+        <div  class="gray-bg" >
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="#">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to CMDB Admin Console.</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="/user/login">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div >
+            <div class="row wrapper border-bottom white-bg page-heading" >
+                <div class="col-lg-10">
+                    <h2>用户清单</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="#">CMDB</a>
+                        </li>
+                        <li>
+                            <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <strong>用户清单</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight" >
+            <div class="row" >
+                <div class="col-lg-12" >
+                    <div class="ibox float-e-margins" >
+                        <div class="ibox-title">
+                            <h5>用户清单 </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">Config option 1</a>
+                                    </li>
+                                    <li><a href="#">Config option 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+
+                                    <button type="button" class="btn btn-sm btn-primary"> 添加人员</button>
+                                    <button type="button" class="btn btn-sm btn-warning"> 删除人员</button>
+                                </div>
+                                <div class="col-sm-2">
+
+                                </div>
+                                <div class="col-sm-4">
+                                        <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+
+                                        <th></th>
+                                        <th>ID </th>
+                                        <th>姓名 </th>
+                                        <th>电话 </th>
+                                        <th>年龄 </th>
+                                        <th>说明 </th>
+                                        <th>修改 </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {%  for item in users  %}
+                                    <tr>
+                                        <td><input type="checkbox"  class="i-checks" name="input"></td>
+                                        <td>{{ item.0 }}</td>
+                                        <td>{{ item.1.name }}</td>
+                                        <td>{{ item.1.tel }}</td>
+                                        <td>{{ item.1.age }}</td>
+                                        <td>{{ item.1.desc }}</td>
+                                        <td><a href="#"><i class="fa fa-edit text-navy"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer">
+
+            <div>
+                <strong>Copyright</strong> Free Copy &copy; 2018
+            </div>
+        </div>
+
+        </div>
+        </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="/static/user/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/user/js/bootstrap.min.js"></script>
+    <script src="/static/user/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/user/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/user/js/inspinia.js"></script>
+    <script src="/static/user/js/plugins/pace/pace.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/user/js/plugins/iCheck/icheck.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+
 </body>
+
 </html>
