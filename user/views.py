@@ -18,4 +18,8 @@ def index(request):
 def login(request):
     return render(request, 'user/login.html')
 
+
+def user_add(request):
+    return render(request, 'user/user_add.html')
+
 # Create your views here.

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CMDB | User</title>
+
+    <link href="/static/user/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/user/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/user/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/user/css/animate.css" rel="stylesheet">
+    <link href="/static/user/css/style.css" rel="stylesheet">
+    <link href="/static/user/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+</head>
+
+<body style="background: #f3f3f4">
+
+    <div id="wrapper" >
+
+
+        <div  class="gray-bg" >
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="#">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome to CMDB Admin Console.</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="/user/login">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div >
+            <div class="row wrapper border-bottom white-bg page-heading" >
+                <div class="col-lg-10">
+                    <h2>用户添加</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="#">CMDB</a>
+                        </li>
+                        <li>
+                            <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <strong>用户添加</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight" >
+            <div class="row" >
+                <div class="col-lg-12" >
+                    <div class="ibox float-e-margins" >
+                        <div class="ibox-title">
+                            <h5>用户添加 </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">Config option 1</a>
+                                    </li>
+                                    <li><a href="#">Config option 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+
+                            <div >
+                                <form method="get" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-lg-4 control-label">ID</label>
+                                            <div class="col-lg-8">
+                                                <input type="text" disabled="" placeholder="由系统生成,无需填写" class="form-control" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">姓名</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" placeholder="请输入您的姓名" required class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">密码</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" placeholder="请输入您的密码" required class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">年龄</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" placeholder="请输入您的年龄" required class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">联系电话</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" placeholder="请输入您的电话" required class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">性别</label>
+                                            <div class="col-sm-8">
+                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="1" checked name="sex"> <i></i> 男 </label></div>
+                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="2" name="sex"> <i></i> 女 </label></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6" id="data_1">
+                                            <label class="col-sm-4 control-label">生日</label>
+                                            <div class="input-group date col-sm-8" style="padding-right:15px;padding-left: 15px;">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="03/04/1990">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">国籍</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control m-b" name="account">
+                                                    <option>中国</option>
+                                                    <option>韩国</option>
+                                                    <option>英国</option>
+                                                    <option>美国</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">语言</label>
+                                            <div class="col-sm-8">
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="1" checked name="hobby"> Java </label>
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="2" name="hobby"> Python </label>
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="3" name="hobby"> C++ </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">个人简介</label>
+                                            <div class="col-sm-8">
+                                                <textarea  placeholder="请输入您的个人简介" style="min-height: 100px" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label class="col-sm-4 control-label">电子邮件</label>
+                                            <div class="col-sm-8">
+                                                <input type="email" placeholder="请输入您的电子邮件" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white" type="button" onclick="javascript:window.location.href='/user/index'">取消修改</button>
+                                            <button class="btn btn-primary" type="submit">保存用户</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        </div>
+        </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="/static/user/js/jquery-3.1.1.min.js"></script>
+    <script src="/static/user/js/bootstrap.min.js"></script>
+    <script src="/static/user/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/static/user/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="/static/user/js/inspinia.js"></script>
+    <script src="/static/user/js/plugins/pace/pace.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/static/user/js/plugins/iCheck/icheck.min.js"></script>
+
+   <!-- Data picker -->
+   <script src="/static/user/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $('#data_1 .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            });
+        });
+    </script>
+
+</body>
+
+</html>
