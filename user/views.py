@@ -13,7 +13,20 @@ def index(request):
 
 
 def login(request):
-    return render(request, 'user/login.html')
+    if request.method == 'GET':
+        return render(request, 'user/login.html')
+    else:
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+
+        login_user = valid_login_model(name, password)
+        if login_user:
+            return redirect("user:index")
+        else:
+            return render(request, 'user/login.html', {
+                'error_message': 'Login Fail! Name or password is not correct!',
+                'name': name
+            })
 
 
 def valid_login(request):
