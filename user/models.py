@@ -19,6 +19,7 @@ def valid_login_model(name,password):
     user_login = None
     for uid, user in users.items():
         if user['name'] == name and user['password'] == password:
+            user['id'] = int(uid)
             user_login = user
             break
     return user_login

@@ -1,5 +1,5 @@
 # encoding: utf-8
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 from .models import get_users, valid_login_model
@@ -7,8 +7,12 @@ import time
 
 
 def index(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
     return render(request, 'user/index.html', {
-        'users': get_users()
+        'users': get_users(),
+        'login_user': login_user
     })
 
 
@@ -21,6 +25,7 @@ def login(request):
 
         login_user = valid_login_model(name, password)
         if login_user:
+            request.session['login_user'] = login_user
             return redirect("user:index")
         else:
             return render(request, 'user/login.html', {
@@ -52,6 +57,7 @@ def valid_login(request):
 
 
 def logout(request):
+    request.session.flush()
     return redirect("user:login")
 
 
