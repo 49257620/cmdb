@@ -38,6 +38,10 @@ def valid_login(request):
         })
 
 
+def logout(request):
+    return redirect("user:login")
+
+
 def user_add(request):
     return render(request, 'user/user_add.html')
 
