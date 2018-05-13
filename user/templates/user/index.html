@@ -139,8 +139,10 @@
                                         <td>
                                             {% if item.1.sex == 0 %}
                                                 女
-                                            {% else %}
+                                            {% elif item.1.sex == 1 %}
                                                 男
+                                            {% else  %}
+                                                未知
                                             {% endif %}
                                         </td>
                                         <td>{{ item.1.tel }}</td>
