@@ -11,8 +11,7 @@ def index(request):
     if not login_user:
         return redirect('user:login')
     return render(request, 'user/index.html', {
-        'users': get_users(),
-        'login_user': login_user
+        'users': get_users()
     })
 
 
