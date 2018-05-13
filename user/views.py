@@ -2,16 +2,13 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
-from user import user
+from .models import get_users
 import time
 
 
 def index(request):
-    users = user.load_data()
-    # return HttpResponse('My First Page!')
     return render(request, 'user/index.html', {
-        'current_time': time.asctime(time.localtime(time.time())),
-        'users': users.items()
+        'users': get_users()
     })
 
 
