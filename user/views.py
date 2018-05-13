@@ -17,8 +17,8 @@ def login(request):
 
 
 def valid_login(request):
-    name = request.GET.get('name')
-    password = request.GET.get('password')
+    name = request.POST.get('name')
+    password = request.POST.get('password')
 
     login_user = valid_login_model(name, password)
     if login_user:
