@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user
+from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk
 import time
 
 
@@ -114,3 +114,23 @@ def user_delete(request):
         for uid in del_users:
             delete_user(uid)
         return redirect('user:index')
+
+
+def user_chpwd(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
+    if request.method == 'GET':
+        return render(request, 'user/user_chpwd.html' )
+    else:
+        is_valid,pwd, errors = user_change_pwd_chk(request)
+        if is_valid:
+
+            login_user['password'] = pwd
+            update_user(login_user)
+            request.session['login_user'] = login_user
+            return redirect('user:index')
+        else:
+            return render(request, 'user/user_chpwd.html', {
+                'errors': errors,
+            })

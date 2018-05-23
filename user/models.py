@@ -138,3 +138,22 @@ def delete_user(uid):
     users.pop(uid, None)
     dump_users(users)
     return True
+
+
+def user_change_pwd_chk(params):
+    old_pw = params.POST.get('password_old','')
+    new_pw = params.POST.get('password','')
+    new_pw_confirm = params.POST.get('password_confirm', '')
+    login_user = params.session.get('login_user')
+    is_valid = True
+    errors = {}
+
+    session_pwd = login_user['password']
+    if old_pw != session_pwd:
+        errors['0001'] = '原密码错误'
+        is_valid = False
+    if new_pw != new_pw_confirm:
+        errors['0002'] = '两次输入密码不一致'
+        is_valid = False
+
+    return is_valid, new_pw, errors
