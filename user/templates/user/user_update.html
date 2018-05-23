@@ -60,7 +60,7 @@
         </div >
             <div class="row wrapper border-bottom white-bg page-heading" >
                 <div class="col-lg-10">
-                    <h2>用户添加</h2>
+                    <h2>用户修改</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="#">CMDB</a>
@@ -69,7 +69,7 @@
                             <a href="#">用户管理</a>
                         </li>
                         <li class="active">
-                            <strong>用户添加</strong>
+                            <strong>用户修改</strong>
                         </li>
                     </ol>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="col-lg-12" >
                     <div class="ibox float-e-margins" >
                         <div class="ibox-title">
-                            <h5>用户添加 </h5>
+                            <h5>用户修改 </h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -104,27 +104,13 @@
                         <div class="ibox-content">
 
                             <div >
-                                <form method="post" action="/user/user_add/" class="form-horizontal">
+                                <form method="post" action="/user/user_update/" class="form-horizontal">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             <label class="col-lg-4 control-label">ID</label>
                                             <div class="col-lg-8">
-                                                <input type="text" disabled="" name="uid" placeholder="由系统生成,无需填写" class="form-control" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-sm-6">
-                                            <label class="col-sm-4 control-label">密码</label>
-                                            <div class="col-sm-8">
-                                                <input type="password" placeholder="请输入您的密码" value="" name="password" required class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label class="col-sm-4 control-label">密码确认</label>
-                                            <div class="col-sm-8">
-                                                <input type="password" placeholder="请再次输入您的密码" value="" name="password_confirm"  required class="form-control">
+                                                <input type="text" readonly name="id" placeholder="由系统生成,无需填写" value="{{ user.id }}" class="form-control" >
                                             </div>
                                         </div>
                                     </div>

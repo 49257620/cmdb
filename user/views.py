@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from .models import get_users, valid_login_model
+from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user
 import time
 
 
@@ -61,6 +61,56 @@ def logout(request):
 
 
 def user_add(request):
-    return render(request, 'user/user_add.html')
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
+    if request.method == 'GET':
+        return render(request, 'user/user_add.html')
+        # return redirect('user:user_add')
+    else:
+        is_valid, user, errors = valid_create_user(request.POST)
+        if is_valid:
+            create_user(user)
+            return redirect('user:index')
+        else:
+            return render(request, 'user/user_add.html', {
+                'user': user,
+                'errors': errors,
+            })
 
-# Create your views here.
+
+def user_update(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
+    if request.method == 'GET':
+        uid = request.GET.get('uid', '')
+
+        return render(request, 'user/user_update.html',{
+            'user' : get_user(uid)
+        })
+        # return redirect('user:user_add')
+    else:
+        is_valid, user, errors = valid_update_user(request.POST)
+        if is_valid:
+            update_user(user)
+            return redirect('user:index')
+        else:
+            user['id'] = request.POST.get('id','')
+            return render(request, 'user/user_update.html', {
+                'user': user,
+                'errors': errors,
+            })
+
+
+def user_delete(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
+    if request.method == 'GET':
+        return redirect('user:index')
+    else:
+        del_users = request.POST.getlist('del_users[]', '')
+        for uid in del_users:
+            delete_user(uid)
+        return redirect('user:index')
