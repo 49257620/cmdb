@@ -5,7 +5,6 @@ from .mysql_db_manager import get_one, get_all, execute_sql
 
 # Create your models here.
 
-DATA_FILE = 'user.data.dat'
 
 LOGIN_SQL = """
 SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
@@ -72,13 +71,6 @@ def get_users():
         })
     """
     return get_all(LIST_SQL, None)
-
-
-def dump_users(users):
-    fhandler = open(DATA_FILE, 'wt')
-    fhandler.write(json.dumps(users))
-    fhandler.close()
-    return True
 
 
 def valid_login_model(name, password):
