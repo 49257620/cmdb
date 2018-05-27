@@ -83,21 +83,23 @@
                         <div class="ibox-title">
                             <h5>用户清单 </h5>
                             <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
+
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
+                                    <i class="fa fa-search"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#">Config option 1</a>
+                                <ul class="dropdown-menu dropdown-user col-sm-2">
+                                    <li>
+                                        <div class="input-group" style="margin: 5px">
+                                            <form action="/user/user_search/" id="search_form" method="POST" class="input-group">
+                                                {% csrf_token %}
+                                                <input type="text" name="search_condition" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-sm btn-primary"> Go!</button> </span>
+                                            </form>
+                                        </div>
                                     </li>
-                                    <li><a href="#">Config option 2</a>
-                                    </li>
+
                                 </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
+
                             </div>
                         </div>
                         <div class="ibox-content">
@@ -112,10 +114,7 @@
                                 <div class="col-sm-2">
 
                                 </div>
-                                <div class="col-sm-4">
-                                        <div class="input-group"><input type="text" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-primary"> Go!</button> </span></div>
-                                </div>
+                                <div class="col-sm-4"></div>
                             </div>
                             <div class="table-responsive">
                                 <table class="table table-striped">

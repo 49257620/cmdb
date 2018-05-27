@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password
+from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password,search_users
 import time
 
 
@@ -134,3 +134,16 @@ def user_chpwd(request):
             return render(request, 'user/user_chpwd.html', {
                 'errors': errors,
             })
+
+
+def user_search(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return redirect('user:login')
+    if request.method == 'GET':
+        return redirect('user:index')
+    else:
+        conditions = request.POST.get('search_condition', '')
+        return render(request, 'user/index.html', {
+            'users': search_users(conditions)
+        })
