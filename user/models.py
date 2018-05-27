@@ -8,16 +8,17 @@ from .mysql_db_manager import get_one,get_all
 DATA_FILE = 'user.data.dat'
 
 LOGIN_SQL = """
-SELECT ID, NAME , PASSWORD, SEX , AGE, TEL, REMARK FROM cmdb_user 
+SELECT id, name , password, sex , age, tel, remark  'desc' FROM cmdb_user 
 WHERE NAME = %s and PASSWORD = %s
 """
 
 LIST_SQL = """
-SELECT ID, NAME , PASSWORD, SEX , AGE, TEL, REMARK FROM cmdb_user 
+SELECT id, name , password, sex , age, tel, remark  'desc' FROM cmdb_user 
 """
 
 
 def get_users():
+    """
     result = get_all(LIST_SQL, None)
     users = []
     for item in result:
@@ -30,7 +31,8 @@ def get_users():
             'tel': item[5],
             'desc': item[6]
         })
-    return users
+    """
+    return get_all(LIST_SQL, None)
 
 
 def dump_users(users):
@@ -42,7 +44,7 @@ def dump_users(users):
 
 def valid_login_model(name, password):
     result = get_one(LOGIN_SQL, (name, password))
-
+    """
     return {
         'id': result[0],
         'name': result[1],
@@ -52,6 +54,8 @@ def valid_login_model(name, password):
         'tel': result[5],
         'desc': result[6]
     } if result else None
+    """
+    return result if result else None
 
 
 def valid_create_user(post_info):

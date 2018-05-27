@@ -16,9 +16,9 @@ def get_conn():
                            charset=MYSQL_CHARSET)
 
 
-def get_one(sql, param):
+def get_one(sql, param=None):
     conn = get_conn()
-    cur = conn.cursor()
+    cur = conn.cursor(MySQLdb.cursors.DictCursor)
     cur.execute(sql, param)
     result = cur.fetchone()
     cur.close()
@@ -26,11 +26,21 @@ def get_one(sql, param):
     return result
 
 
-def get_all(sql, param):
+def get_all(sql, param=None):
     conn = get_conn()
-    cur = conn.cursor()
+    cur = conn.cursor(MySQLdb.cursors.DictCursor)
     cur.execute(sql, param)
     result = cur.fetchall()
+    cur.close()
+    conn.close()
+    return result
+
+
+def execute_sql(sql, param=None):
+    conn = get_conn()
+    cur = conn.cursor(MySQLdb.cursors.DictCursor)
+    result = cur.execute(sql, param)
+    conn.commit()
     cur.close()
     conn.close()
     return result
