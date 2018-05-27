@@ -1,7 +1,7 @@
 # encoding: utf-8
 import json
 from django.db import models
-from .mysql_db_manager import get_one
+from .mysql_db_manager import get_one,get_all
 
 # Create your models here.
 
@@ -12,11 +12,24 @@ SELECT ID, NAME , PASSWORD, SEX , AGE, TEL, REMARK FROM cmdb_user
 WHERE NAME = %s and PASSWORD = %s
 """
 
+LIST_SQL = """
+SELECT ID, NAME , PASSWORD, SEX , AGE, TEL, REMARK FROM cmdb_user 
+"""
+
 
 def get_users():
-    f_handler = open(DATA_FILE, 'rt', encoding='utf-8')
-    users = json.loads(f_handler.read())
-    f_handler.close()
+    result = get_all(LIST_SQL, None)
+    users = []
+    for item in result:
+        users.append({
+            'id': item[0],
+            'name': item[1],
+            'password': item[2],
+            'sex': item[3],
+            'age': item[4],
+            'tel': item[5],
+            'desc': item[6]
+        })
     return users
 
 

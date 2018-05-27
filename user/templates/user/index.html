@@ -133,29 +133,29 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {%  for item in users.items  %}
+                                    {%  for item in users  %}
                                     <tr>
                                         <td>
-                                            {% if request.session.login_user.id != item.0 %}
-                                                <input type="checkbox"  value="{{ item.0 }}" class="i-checks" name="del_users[]">
+                                            {% if request.session.login_user.id != item.id %}
+                                                <input type="checkbox"  value="{{ item.id }}" class="i-checks" name="del_users[]">
                                             {% endif %}
 
                                         </td>
-                                        <td>{{ item.0 }}</td>
-                                        <td>{{ item.1.name }}</td>
-                                        <td>{{ item.1.age }}</td>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.age }}</td>
                                         <td>
-                                            {% if item.1.sex == "0" %}
+                                            {% if item.sex == 0 %}
                                                 女
-                                            {% elif item.1.sex == "1" %}
+                                            {% elif item.sex == 1 %}
                                                 男
                                             {% else  %}
                                                 未知
                                             {% endif %}
                                         </td>
-                                        <td>{{ item.1.tel }}</td>
-                                        <td>{{ item.1.desc }}</td>
-                                        <td><a href="{% url 'user:user_update' %}?uid={{ item.0 }}"><i class="fa fa-edit text-navy"></i></a></td>
+                                        <td>{{ item.tel }}</td>
+                                        <td>{{ item.desc }}</td>
+                                        <td><a href="{% url 'user:user_update' %}?uid={{ item.id }}"><i class="fa fa-edit text-navy"></i></a></td>
                                     </tr>
                                     {% endfor %}
                                     </tbody>

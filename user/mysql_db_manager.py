@@ -24,3 +24,13 @@ def get_one(sql, param):
     cur.close()
     conn.close()
     return result
+
+
+def get_all(sql, param):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute(sql, param)
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+    return result
