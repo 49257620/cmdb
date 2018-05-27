@@ -46,6 +46,11 @@ UPDATE cmdb_user SET
 where id = %s
 """
 
+DELETE_USER_BY_ID_SQL = """
+DELETE FROM cmdb_user where id = %s
+"""
+
+
 def get_users():
     """
     result = get_all(LIST_SQL, None)
@@ -182,10 +187,8 @@ def update_user(params):
 
 
 def delete_user(uid):
-    users = get_users()
-    users.pop(uid, None)
-    dump_users(users)
-    return True
+    result = execute_sql(DELETE_USER_BY_ID_SQL, (uid,))
+    return result
 
 
 def user_change_pwd_chk(params):
