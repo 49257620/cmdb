@@ -101,7 +101,6 @@ def valid_create_user(post_info):
     is_valid = True
     user = {}
     errors = {}
-    users = get_users()
 
     user['name'] = name.strip()
 
