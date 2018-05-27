@@ -1,16 +1,10 @@
 # encoding: utf-8
 import json
 from django.db import models
-from .mysql_db_manager import get_one
 
 # Create your models here.
 
 DATA_FILE = 'user.data.dat'
-
-LOGIN_SQL = """
-SELECT ID, NAME , PASSWORD, SEX , AGE, TEL, REMARK FROM cmdb_user 
-WHERE NAME = %s and PASSWORD = %s
-"""
 
 
 def get_users():
@@ -19,26 +13,21 @@ def get_users():
     f_handler.close()
     return users
 
-
 def dump_users(users):
     fhandler = open(DATA_FILE, 'wt')
     fhandler.write(json.dumps(users))
     fhandler.close()
     return True
 
-
-def valid_login_model(name, password):
-    result = get_one(LOGIN_SQL, (name, password))
-
-    return {
-        'id': result[0],
-        'name': result[1],
-        'password': result[2],
-        'sex': result[3],
-        'age': result[4],
-        'tel': result[5],
-        'desc': result[6]
-    } if result else None
+def valid_login_model(name,password):
+    users = get_users()
+    user_login = None
+    for uid, user in users.items():
+        if user['name'] == name and user['password'] == password:
+            user['id'] = uid
+            user_login = user
+            break
+    return user_login
 
 
 def valid_create_user(post_info):
@@ -105,7 +94,7 @@ def valid_update_user(params):
     tel = params.get('tel', '')
     age = params.get('age', '')
     sex = params.get('sex', '')
-    desc = params.get('desc', '')
+    desc = params.get('desc','')
     is_valid = True
     user = {}
     errors = {}
@@ -151,8 +140,8 @@ def delete_user(uid):
 
 
 def user_change_pwd_chk(params):
-    old_pw = params.POST.get('password_old', '')
-    new_pw = params.POST.get('password', '')
+    old_pw = params.POST.get('password_old','')
+    new_pw = params.POST.get('password','')
     new_pw_confirm = params.POST.get('password_confirm', '')
     login_user = params.session.get('login_user')
     is_valid = True
