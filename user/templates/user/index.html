@@ -154,7 +154,7 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ item.tel }}</td>
-                                        <td>{{ item.desc }}</td>
+                                        <td>{{ item.remark }}</td>
                                         <td><a href="{% url 'user:user_update' %}?uid={{ item.id }}"><i class="fa fa-edit text-navy"></i></a></td>
                                     </tr>
                                     {% endfor %}

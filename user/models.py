@@ -8,12 +8,12 @@ from .mysql_db_manager import get_one,get_all
 DATA_FILE = 'user.data.dat'
 
 LOGIN_SQL = """
-SELECT id, name , password, sex , age, tel, remark  'desc' FROM cmdb_user 
+SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
 WHERE NAME = %s and PASSWORD = %s
 """
 
 LIST_SQL = """
-SELECT id, name , password, sex , age, tel, remark  'desc' FROM cmdb_user 
+SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
 """
 
 
