@@ -95,7 +95,6 @@ def valid_update_user(params):
     age = params.get('age', '')
     sex = params.get('sex', '')
     desc = params.get('desc','')
-    print(uid)
     is_valid = True
     user = {}
     errors = {}
