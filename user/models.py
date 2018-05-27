@@ -40,6 +40,11 @@ UPDATE cmdb_user SET
 where id = %s
 """
 
+UPDATE_USER_PASSWORD_BY_ID = """
+UPDATE cmdb_user SET 
+  password = %s
+where id = %s
+"""
 
 def get_users():
     """
@@ -200,3 +205,9 @@ def user_change_pwd_chk(params):
         is_valid = False
 
     return is_valid, new_pw, errors
+
+
+def update_user_password(params):
+    result = execute_sql(UPDATE_USER_PASSWORD_BY_ID,
+                         (params['password'], params['id']))
+    return result

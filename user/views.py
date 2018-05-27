@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk
+from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password
 import time
 
 
@@ -127,7 +127,7 @@ def user_chpwd(request):
         if is_valid:
 
             login_user['password'] = pwd
-            update_user(login_user)
+            update_user_password(login_user)
             request.session['login_user'] = login_user
             return redirect('user:index')
         else:
