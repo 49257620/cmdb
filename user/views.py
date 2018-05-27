@@ -10,9 +10,15 @@ def index(request):
     login_user = request.session.get('login_user')
     if not login_user:
         return redirect('user:login')
-    return render(request, 'user/index.html', {
-        'users': get_users()
-    })
+    if request.method == 'GET':
+        return render(request, 'user/index.html', {
+            'users': get_users()
+        })
+    else:
+        conditions = request.POST.get('search_condition', '')
+        return render(request, 'user/index.html', {
+            'users': search_users(conditions)
+        })
 
 
 def login(request):
