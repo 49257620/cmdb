@@ -18,7 +18,7 @@ SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user
 
 LIST_SQL_BY_CONDITIONS = """
 SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
-WHERE name like '%{0}%'
+WHERE name like %s
 """
 
 CHECK_USER_NAME_SQL = """
@@ -222,4 +222,4 @@ def update_user_password(params):
 
 
 def search_users(conditions):
-    return get_all(LIST_SQL_BY_CONDITIONS.format(conditions))
+    return get_all(LIST_SQL_BY_CONDITIONS, ('%' + conditions + '%',))
