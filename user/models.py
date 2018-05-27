@@ -25,6 +25,21 @@ INSERT INTO cmdb_user (name ,password,age,sex,tel,remark)
     VALUES (%s,%s,%s,%s,%s,%s)
 """
 
+FIND_USER_BY_ID = """
+SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
+WHERE id = %s
+"""
+
+UPDATE_USER_BY_ID = """
+UPDATE cmdb_user SET 
+  name = %s,
+  sex = %s,
+  age = %s,
+  tel = %s,
+  remark = %s
+where id = %s
+"""
+
 
 def get_users():
     """
@@ -111,15 +126,13 @@ def valid_create_user(post_info):
 
 def create_user(params):
     result = execute_sql(INSERT_USER_SQL, (
-    params['name'], params['password'], params['age'], params['sex'], params['tel'], params['remark']))
+        params['name'], params['password'], params['age'], params['sex'], params['tel'], params['remark']))
     return result
 
 
 def get_user(uid):
-    users = get_users()
-    user = users.get(uid, {})
-    user['id'] = uid
-    return user
+    result = get_one(FIND_USER_BY_ID, (uid,))
+    return result
 
 
 def valid_update_user(params):
@@ -128,24 +141,22 @@ def valid_update_user(params):
     tel = params.get('tel', '')
     age = params.get('age', '')
     sex = params.get('sex', '')
-    desc = params.get('desc', '')
+    remark = params.get('remark', '')
     is_valid = True
     user = {}
     errors = {}
-    users = get_users()
+    user_tmp = get_user(uid)
 
-    user['id'] = uid.strip()
-    if users.get(user['id']) is None:
+    if user_tmp is None:
         errors['id'] = '用户信息不存在'
         is_valid = False
-
+    user['id'] = uid.strip()
     user['name'] = name.strip()
 
-    for uid, cuser in users.items():
-        if cuser['name'] == user['name'] and uid != user['id']:
-            errors['name'] = '用户名已存在'
-            is_valid = False
-            break
+    result = get_one(CHECK_USER_NAME_SQL, (user['name'], user['id']))
+    if result:
+        errors['name'] = '用户名已存在'
+        is_valid = False
 
     user['age'] = age.strip()
     if not user['age'].isdigit():
@@ -154,16 +165,15 @@ def valid_update_user(params):
 
     user['tel'] = tel
     user['sex'] = sex
-    user['desc'] = desc
+    user['remark'] = remark
 
     return is_valid, user, errors
 
 
 def update_user(params):
-    uid = params.pop('id')
-    users = get_users()
-    users[uid].update(params)
-    return dump_users(users)
+    result = execute_sql(UPDATE_USER_BY_ID,
+                         (params['name'], params['sex'], params['age'], params['tel'], params['remark'], params['id']))
+    return result
 
 
 def delete_user(uid):

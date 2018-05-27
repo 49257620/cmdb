@@ -125,8 +125,8 @@
                                         <div class="form-group col-sm-6">
                                             <label class="col-sm-4 control-label">性别</label>
                                             <div class="col-sm-8">
-                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="1" {% if user.sex != "0"%} checked="checked" {% endif %} name="sex"> <i></i> 男 </label></div>
-                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="0" {% if user.sex == "0"%} checked="checked" {% endif %} name="sex"> <i></i> 女 </label></div>
+                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="1" {% if user.sex != 0%} checked="checked" {% endif %} name="sex"> <i></i> 男 </label></div>
+                                                <div class="checkbox-inline i-checks"><label> <input type="radio" value="0" {% if user.sex == 0%} checked="checked" {% endif %} name="sex"> <i></i> 女 </label></div>
                                             </div>
                                         </div>
                                     </div>
@@ -149,7 +149,7 @@
                                         <div class="form-group col-sm-6">
                                             <label class="col-sm-4 control-label">个人简介</label>
                                             <div class="col-sm-8">
-                                                <textarea  placeholder="请输入您的个人简介" name="desc" style="min-height: 100px" class="form-control">{{ user.desc }}</textarea>
+                                                <textarea  placeholder="请输入您的个人简介" name="remark" style="min-height: 100px" class="form-control">{{ user.remark }}</textarea>
                                             </div>
                                         </div>
 
