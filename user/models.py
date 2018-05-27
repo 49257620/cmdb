@@ -1,7 +1,7 @@
 # encoding: utf-8
 import json
 from django.db import models
-from .mysql_db_manager import get_one,get_all
+from .mysql_db_manager import get_one, get_all, execute_sql
 
 # Create your models here.
 
@@ -14,6 +14,15 @@ WHERE NAME = %s and PASSWORD = %s
 
 LIST_SQL = """
 SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
+"""
+
+CHECK_USER_NAME_SQL = """
+select id from cmdb_user where name =%s and id !=%s
+"""
+
+INSERT_USER_SQL = """
+INSERT INTO cmdb_user (name ,password,age,sex,tel,remark)
+    VALUES (%s,%s,%s,%s,%s,%s)
 """
 
 
@@ -65,7 +74,7 @@ def valid_create_user(post_info):
     sex = post_info.get('sex', '')
     age = post_info.get('age', '')
     tel = post_info.get('tel', '')
-    desc = post_info.get('desc', '')
+    remark = post_info.get('remark', '')
 
     is_valid = True
     user = {}
@@ -78,11 +87,10 @@ def valid_create_user(post_info):
         is_valid = False
         errors['name'] = '用户名不能为空'
     else:
-        for uid, cuser in users.items():
-            if cuser['name'] == user['name']:
-                errors['name'] = '用户名已存在'
-                is_valid = False
-                break
+        result = get_one(CHECK_USER_NAME_SQL, (user['name'], 0))
+        if result:
+            errors['name'] = '用户名已存在'
+            is_valid = False
 
     user['age'] = age.strip()
     if not user['age'].isdigit():
@@ -92,7 +100,7 @@ def valid_create_user(post_info):
     user['tel'] = tel
     user['sex'] = sex
     user['password'] = password.strip()
-    user['desc'] = desc
+    user['remark'] = remark
 
     if user['password'] == '' or password_confirm != user['password']:
         is_valid = False
@@ -102,11 +110,9 @@ def valid_create_user(post_info):
 
 
 def create_user(params):
-    users = get_users()
-    uids = [int(key) for key in users]
-    uid = max(uids + [0]) + 1
-    users[uid] = params
-    return dump_users(users)
+    result = execute_sql(INSERT_USER_SQL, (
+    params['name'], params['password'], params['age'], params['sex'], params['tel'], params['remark']))
+    return result
 
 
 def get_user(uid):
