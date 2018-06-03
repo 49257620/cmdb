@@ -45,6 +45,17 @@ class User(object):
     where id = %s
     """
 
+    LIST_SQL_BY_CONDITIONS = """
+    SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
+    WHERE name like %s
+    """
+
+    UPDATE_USER_PASSWORD_BY_ID = """
+    UPDATE cmdb_user SET 
+      password = %s
+    where id = %s
+    """
+
     def __init__(self, id=0, name='', password='', sex=1, age=0, tel='', remark=''):
         self.id = id
         self.name = name
@@ -153,6 +164,12 @@ class User(object):
                                       self.id))
         return result
 
+    @classmethod
+    def search_users(cls,conditions):
+        result_list =  db2.get_all(cls.LIST_SQL_BY_CONDITIONS, ('%' + conditions + '%',))
+        user_list = [cls.result_to_user(result) for result in result_list]
+        return user_list
+
     def as_dict(self):
         return {
             'id': self.id,
@@ -163,6 +180,32 @@ class User(object):
             'tel': self.tel,
             'remark': self.remark
         }
+
+    @classmethod
+    def user_change_pwd_chk(cls,params):
+        old_pw = params.POST.get('password_old', '')
+        new_pw = params.POST.get('password', '')
+        new_pw_confirm = params.POST.get('password_confirm', '')
+        login_user = params.session.get('login_user')
+        is_valid = True
+        errors = {}
+
+        session_pwd = login_user['password']
+        if old_pw != session_pwd:
+            errors['0001'] = '原密码错误'
+            is_valid = False
+        if new_pw != new_pw_confirm:
+            errors['0002'] = '两次输入密码不一致'
+            is_valid = False
+
+        return is_valid, new_pw, errors
+
+    @classmethod
+    def update_user_password(cls,params):
+        print('classmethod')
+        result = DbUtils.execute_sql(cls.UPDATE_USER_PASSWORD_BY_ID,
+                                     (params['password'], params['id']))
+        return result
 
 
 LOGIN_SQL = """

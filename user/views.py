@@ -131,11 +131,11 @@ def user_chpwd(request):
     if request.method == 'GET':
         return render(request, 'user/user_chpwd.html' )
     else:
-        is_valid,pwd, errors = user_change_pwd_chk(request)
+        is_valid,pwd, errors = User.user_change_pwd_chk(request)
         if is_valid:
 
             login_user['password'] = pwd
-            update_user_password(login_user)
+            User.update_user_password(login_user)
             request.session['login_user'] = login_user
             return redirect('user:index')
         else:
@@ -153,5 +153,5 @@ def user_search(request):
     else:
         conditions = request.POST.get('search_condition', '')
         return render(request, 'user/index.html', {
-            'users': search_users(conditions)
+            'users': User.search_users(conditions)
         })
