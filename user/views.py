@@ -19,7 +19,7 @@ def index(request):
     else:
         conditions = request.POST.get('search_condition', '')
         return render(request, 'user/index.html', {
-            'users': search_users(conditions)
+            'users': User.search_users(conditions)
         })
 
 
