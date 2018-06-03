@@ -26,6 +26,10 @@ class User(object):
         VALUES (%s,%s,%s,%s,%s,%s)
     """
 
+    DELETE_USER_BY_ID_SQL = """
+    DELETE FROM cmdb_user where id = %s
+    """
+
     def __init__(self, id, name, password, sex, age, tel, remark):
         self.id = id
         self.name = name
@@ -85,6 +89,11 @@ class User(object):
     def create_user(cls,add_user):
         result = db2.execute_sql(cls.INSERT_USER_SQL, (
             add_user.name, add_user.password, add_user.age, add_user.sex, add_user.tel, add_user.remark))
+        return result
+
+    @classmethod
+    def delete_user(cls,uid):
+        result = db2.execute_sql(cls.DELETE_USER_BY_ID_SQL, (uid,))
         return result
 
     def as_dict(self):

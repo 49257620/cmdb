@@ -120,7 +120,7 @@ def user_delete(request):
     else:
         del_users = request.POST.getlist('del_users[]', '')
         for uid in del_users:
-            delete_user(uid)
+            User.delete_user(uid)
         return redirect('user:index')
 
 
