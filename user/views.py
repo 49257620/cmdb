@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password,search_users
 import time
 
+from .models import User
+
 
 def index(request):
     login_user = request.session.get('login_user')
@@ -12,7 +14,7 @@ def index(request):
         return redirect('user:login')
     if request.method == 'GET':
         return render(request, 'user/index.html', {
-            'users': get_users()
+            'users': User.get_users()
         })
     else:
         conditions = request.POST.get('search_condition', '')
@@ -28,9 +30,9 @@ def login(request):
         name = request.POST.get('name')
         password = request.POST.get('password')
 
-        login_user = valid_login_model(name, password)
+        login_user = User.login_valid(name, password)
         if login_user:
-            request.session['login_user'] = login_user
+            request.session['login_user'] = login_user.as_dict()
             return redirect("user:index")
         else:
             return render(request, 'user/login.html', {

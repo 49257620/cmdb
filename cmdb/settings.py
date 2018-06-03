@@ -76,8 +76,16 @@ WSGI_APPLICATION = 'cmdb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cmdb_lw',
+        'HOST': '47.104.188.243',
+        'PORT': 3306,
+        'USER': 'root',
+        'PASSWORD': '1qaz@WSX',
+        'CHARSET': 'utf8',
+        'OPTION': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 

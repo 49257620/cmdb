@@ -2,58 +2,8 @@
 import json
 from django.db import models
 from .mysql_db_manager_v1 import DbUtils
-from .mysql_db_manager_v2 import DbUtils as db2
-
 
 # Create your models here.
-
-class User(object):
-    LOGIN_SQL = """
-    SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
-    WHERE NAME = %s and PASSWORD = %s
-    """
-
-    LIST_SQL = """
-    SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
-    """
-
-    def __init__(self, id, name, password, sex, age, tel, remark):
-        self.id = id
-        self.name = name
-        self.password = password
-        self.sex = sex
-        self.age = age
-        self.tel = tel
-        self.remark = remark
-
-    @classmethod
-    def login_valid(cls, name, password):
-        result = db2.get_one(cls.LOGIN_SQL, (name, password))
-        # print(result)
-        return cls.result_to_user(result) if result else None
-
-    @classmethod
-    def get_users(cls):
-        result_list = db2.get_all(cls.LIST_SQL, None)
-        user_list = [cls.result_to_user(result) for result in result_list]
-        # print(user_list)
-        return user_list
-
-    @classmethod
-    def result_to_user(cls,result):
-        return User(id=result[0], name=result[1], password=result[2], sex=result[3], age=result[4], tel=result[5],
-                    remark=result[6])
-
-    def as_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'password': self.password,
-            'sex': self.sex,
-            'age': self.age,
-            'tel': self.tel,
-            'remark': self.remark
-        }
 
 
 LOGIN_SQL = """
@@ -228,8 +178,7 @@ def valid_update_user(params):
 
 def update_user(params):
     result = DbUtils.execute_sql(UPDATE_USER_BY_ID,
-                                 (params['name'], params['sex'], params['age'], params['tel'], params['remark'],
-                                  params['id']))
+                         (params['name'], params['sex'], params['age'], params['tel'], params['remark'], params['id']))
     return result
 
 
@@ -259,7 +208,7 @@ def user_change_pwd_chk(params):
 
 def update_user_password(params):
     result = DbUtils.execute_sql(UPDATE_USER_PASSWORD_BY_ID,
-                                 (params['password'], params['id']))
+                         (params['password'], params['id']))
     return result
 
 
