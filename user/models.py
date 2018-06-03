@@ -1,7 +1,7 @@
 # encoding: utf-8
 import json
 from django.db import models
-from .mysql_db_manager import get_one, get_all, execute_sql
+from .mysql_db_manager_v1 import DbUtils
 
 # Create your models here.
 
@@ -70,11 +70,11 @@ def get_users():
             'desc': item[6]
         })
     """
-    return get_all(LIST_SQL, None)
+    return DbUtils.get_all(LIST_SQL, None)
 
 
 def valid_login_model(name, password):
-    result = get_one(LOGIN_SQL, (name, password))
+    result = DbUtils.get_one(LOGIN_SQL, (name, password))
     """
     return {
         'id': result[0],
@@ -108,7 +108,7 @@ def valid_create_user(post_info):
         is_valid = False
         errors['name'] = '用户名不能为空'
     else:
-        result = get_one(CHECK_USER_NAME_SQL, (user['name'], 0))
+        result = DbUtils.get_one(CHECK_USER_NAME_SQL, (user['name'], 0))
         if result:
             errors['name'] = '用户名已存在'
             is_valid = False
@@ -131,13 +131,13 @@ def valid_create_user(post_info):
 
 
 def create_user(params):
-    result = execute_sql(INSERT_USER_SQL, (
+    result = DbUtils.execute_sql(INSERT_USER_SQL, (
         params['name'], params['password'], params['age'], params['sex'], params['tel'], params['remark']))
     return result
 
 
 def get_user(uid):
-    result = get_one(FIND_USER_BY_ID, (uid,))
+    result = DbUtils.get_one(FIND_USER_BY_ID, (uid,))
     return result
 
 
@@ -159,7 +159,7 @@ def valid_update_user(params):
     user['id'] = uid.strip()
     user['name'] = name.strip()
 
-    result = get_one(CHECK_USER_NAME_SQL, (user['name'], user['id']))
+    result = DbUtils.get_one(CHECK_USER_NAME_SQL, (user['name'], user['id']))
     if result:
         errors['name'] = '用户名已存在'
         is_valid = False
@@ -177,13 +177,13 @@ def valid_update_user(params):
 
 
 def update_user(params):
-    result = execute_sql(UPDATE_USER_BY_ID,
+    result = DbUtils.execute_sql(UPDATE_USER_BY_ID,
                          (params['name'], params['sex'], params['age'], params['tel'], params['remark'], params['id']))
     return result
 
 
 def delete_user(uid):
-    result = execute_sql(DELETE_USER_BY_ID_SQL, (uid,))
+    result = DbUtils.execute_sql(DELETE_USER_BY_ID_SQL, (uid,))
     return result
 
 
@@ -207,10 +207,10 @@ def user_change_pwd_chk(params):
 
 
 def update_user_password(params):
-    result = execute_sql(UPDATE_USER_PASSWORD_BY_ID,
+    result = DbUtils.execute_sql(UPDATE_USER_PASSWORD_BY_ID,
                          (params['password'], params['id']))
     return result
 
 
 def search_users(conditions):
-    return get_all(LIST_SQL_BY_CONDITIONS, ('%' + conditions + '%',))
+    return DbUtils.get_all(LIST_SQL_BY_CONDITIONS, ('%' + conditions + '%',))
