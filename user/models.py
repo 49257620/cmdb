@@ -17,6 +17,15 @@ class User(object):
     SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
     """
 
+    CHECK_USER_NAME_SQL = """
+    select id from cmdb_user where name =%s and id !=%s
+    """
+
+    INSERT_USER_SQL = """
+    INSERT INTO cmdb_user (name ,password,age,sex,tel,remark)
+        VALUES (%s,%s,%s,%s,%s,%s)
+    """
+
     def __init__(self, id, name, password, sex, age, tel, remark):
         self.id = id
         self.name = name
@@ -43,6 +52,40 @@ class User(object):
     def result_to_user(cls,result):
         return User(id=result[0], name=result[1], password=result[2], sex=result[3], age=result[4], tel=result[5],
                     remark=result[6])
+
+    @classmethod
+    def valid_create_user(cls,post_info):
+        add_user = User(id=0,name=post_info.get('name', '').strip(), password=post_info.get('password', '').strip(), sex=post_info.get('sex', '').strip(), age=post_info.get('age', '').strip(), tel=post_info.get('tel', '').strip(),
+                    remark=post_info.get('remark', '').strip())
+        password_confirm = post_info.get('password_confirm', '')
+
+        is_valid = True
+        errors = {}
+
+        if add_user.name == '':
+            is_valid = False
+            errors['name'] = '用户名不能为空'
+        else:
+            result = db2.get_one(cls.CHECK_USER_NAME_SQL, (add_user.name, 0))
+            if result:
+                errors['name'] = '用户名已存在'
+                is_valid = False
+
+        if not add_user.age.isdigit():
+            errors['age'] = '年龄格式错误'
+            is_valid = False
+
+        if add_user.password == '' or password_confirm != add_user.password:
+            is_valid = False
+            errors['password'] = '密码不能为空, 且两次输入密码必须相同'
+
+        return is_valid, add_user, errors
+
+    @classmethod
+    def create_user(cls,add_user):
+        result = db2.execute_sql(cls.INSERT_USER_SQL, (
+            add_user.name, add_user.password, add_user.age, add_user.sex, add_user.tel, add_user.remark))
+        return result
 
     def as_dict(self):
         return {

@@ -76,9 +76,9 @@ def user_add(request):
         return render(request, 'user/user_add.html')
         # return redirect('user:user_add')
     else:
-        is_valid, user, errors = valid_create_user(request.POST)
+        is_valid, user, errors = User.valid_create_user(request.POST)
         if is_valid:
-            create_user(user)
+            User.create_user(user)
             return redirect('user:index')
         else:
             return render(request, 'user/user_add.html', {
