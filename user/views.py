@@ -78,7 +78,7 @@ def user_add(request):
     else:
         is_valid, user, errors = User.valid_create_user(request.POST)
         if is_valid:
-            User.create_user(user)
+            user.create_user_obj()
             return redirect('user:index')
         else:
             return render(request, 'user/user_add.html', {
@@ -95,7 +95,7 @@ def user_update(request):
         uid = request.GET.get('uid', '')
 
         return render(request, 'user/user_update.html',{
-            'user' : get_user(uid)
+            'user' : User.get_user(uid)
         })
         # return redirect('user:user_add')
     else:

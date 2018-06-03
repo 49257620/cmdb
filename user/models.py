@@ -30,7 +30,12 @@ class User(object):
     DELETE FROM cmdb_user where id = %s
     """
 
-    def __init__(self, id, name, password, sex, age, tel, remark):
+    FIND_USER_BY_ID = """
+    SELECT id, name , password, sex , age, tel, remark  FROM cmdb_user 
+    WHERE id = %s
+    """
+
+    def __init__(self, id=0, name='', password='', sex=1, age=0, tel='', remark=''):
         self.id = id
         self.name = name
         self.password = password
@@ -91,10 +96,20 @@ class User(object):
             add_user.name, add_user.password, add_user.age, add_user.sex, add_user.tel, add_user.remark))
         return result
 
+    def create_user_obj(self):
+        result = db2.execute_sql(self.INSERT_USER_SQL, (
+            self.name, self.password, self.age, self.sex, self.tel, self.remark))
+        return result
+
     @classmethod
     def delete_user(cls,uid):
         result = db2.execute_sql(cls.DELETE_USER_BY_ID_SQL, (uid,))
         return result
+
+    @classmethod
+    def get_user(cls,uid):
+        result = db2.get_one(cls.FIND_USER_BY_ID, (uid,))
+        return cls.result_to_user(result) if result else None
 
     def as_dict(self):
         return {
