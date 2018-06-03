@@ -99,9 +99,9 @@ def user_update(request):
         })
         # return redirect('user:user_add')
     else:
-        is_valid, user, errors = valid_update_user(request.POST)
+        is_valid, user, errors = User.valid_update_user(request.POST)
         if is_valid:
-            update_user(user)
+            user.update_user()
             return redirect('user:index')
         else:
             user['id'] = request.POST.get('id','')

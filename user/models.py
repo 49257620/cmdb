@@ -35,6 +35,16 @@ class User(object):
     WHERE id = %s
     """
 
+    UPDATE_USER_BY_ID = """
+    UPDATE cmdb_user SET 
+      name = %s,
+      sex = %s,
+      age = %s,
+      tel = %s,
+      remark = %s
+    where id = %s
+    """
+
     def __init__(self, id=0, name='', password='', sex=1, age=0, tel='', remark=''):
         self.id = id
         self.name = name
@@ -110,6 +120,38 @@ class User(object):
     def get_user(cls,uid):
         result = db2.get_one(cls.FIND_USER_BY_ID, (uid,))
         return cls.result_to_user(result) if result else None
+
+
+    @classmethod
+    def valid_update_user(cls,params):
+        update_user = User(id=params.get('id', '').strip(), name=params.get('name', '').strip(), password=params.get('password', '').strip(),
+                        sex=params.get('sex', '').strip(), age=params.get('age', '').strip(),
+                        tel=params.get('tel', '').strip(),
+                        remark=params.get('remark', '').strip())
+        is_valid = True
+        errors = {}
+        user_tmp = cls.get_user(update_user.id)
+
+        if user_tmp is None:
+            errors['id'] = '用户信息不存在'
+            is_valid = False
+
+        result = db2.get_one(cls.CHECK_USER_NAME_SQL, (update_user.name, update_user.id))
+        if result:
+            errors['name'] = '用户名已存在'
+            is_valid = False
+
+        if not update_user.age.isdigit():
+            errors['age'] = '年龄格式错误'
+            is_valid = False
+
+        return is_valid, update_user, errors
+
+    def update_user(self):
+        result = db2.execute_sql(self.UPDATE_USER_BY_ID,
+                                     (self.name, self.sex, self.age, self.tel, self.remark,
+                                      self.id))
+        return result
 
     def as_dict(self):
         return {
