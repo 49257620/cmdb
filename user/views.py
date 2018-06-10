@@ -2,10 +2,11 @@
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from .models import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password,search_users
+# from .modelsv3 import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password,search_users
 import time
 
 from .models import User
+from .UserValidator import UserValidator
 
 
 def index(request):
@@ -14,12 +15,12 @@ def index(request):
         return redirect('user:login')
     if request.method == 'GET':
         return render(request, 'user/index.html', {
-            'users': User.get_users()
+            'users': User.objects.all()
         })
     else:
         conditions = request.POST.get('search_condition', '')
         return render(request, 'user/index.html', {
-            'users': User.search_users(conditions)
+            'users': User.objects.filter(name__contains=conditions)
         })
 
 
@@ -30,7 +31,7 @@ def login(request):
         name = request.POST.get('name')
         password = request.POST.get('password')
 
-        login_user = User.login_valid(name, password)
+        login_user = UserValidator.login_valid(name, password)
         if login_user:
             request.session['login_user'] = login_user.as_dict()
             return redirect("user:index")
@@ -39,28 +40,6 @@ def login(request):
                 'error_message': 'Login Fail! Name or password is not correct!',
                 'name': name
             })
-
-
-def valid_login(request):
-    name = request.POST.get('name')
-    password = request.POST.get('password')
-
-    login_user = valid_login_model(name, password)
-    if login_user:
-        """
-        return render(request, 'user/index.html', {
-            'users': get_users(),
-            'login_user': login_user
-        })
-        return redirect("user:index")
-        return redirect("/user/index/")
-        """
-        return redirect("user:index")
-    else:
-        return render(request, 'user/login.html', {
-            'error_message': 'Login Fail! Name or password is not correct!',
-            'name': name
-        })
 
 
 def logout(request):
@@ -76,9 +55,9 @@ def user_add(request):
         return render(request, 'user/user_add.html')
         # return redirect('user:user_add')
     else:
-        is_valid, user, errors = User.valid_create_user(request.POST)
+        is_valid, user, errors = UserValidator.valid_create_user(request.POST)
         if is_valid:
-            user.create_user_obj()
+            user.save()
             return redirect('user:index')
         else:
             return render(request, 'user/user_add.html', {
@@ -95,16 +74,16 @@ def user_update(request):
         uid = request.GET.get('uid', '')
 
         return render(request, 'user/user_update.html',{
-            'user' : User.get_user(uid)
+            'user' : User.objects.get(id=uid)
         })
         # return redirect('user:user_add')
     else:
-        is_valid, user, errors = User.valid_update_user(request.POST)
+        is_valid, user, errors = UserValidator.valid_update_user(request.POST)
         if is_valid:
-            user.update_user()
+            user.save()
             return redirect('user:index')
         else:
-            user['id'] = request.POST.get('id','')
+            #user['id'] = request.POST.get('id','')
             return render(request, 'user/user_update.html', {
                 'user': user,
                 'errors': errors,
@@ -120,7 +99,7 @@ def user_delete(request):
     else:
         del_users = request.POST.getlist('del_users[]', '')
         for uid in del_users:
-            User.delete_user(uid)
+            User.objects.get(id=uid).delete()
         return redirect('user:index')
 
 
@@ -131,11 +110,13 @@ def user_chpwd(request):
     if request.method == 'GET':
         return render(request, 'user/user_chpwd.html' )
     else:
-        is_valid,pwd, errors = User.user_change_pwd_chk(request)
+        is_valid,pwd, errors = UserValidator.user_change_pwd_chk(request)
         if is_valid:
 
             login_user['password'] = pwd
-            User.update_user_password(login_user)
+            user = User.objects.get(id=login_user['id'])
+            user.password = pwd
+            user.save()
             request.session['login_user'] = login_user
             return redirect('user:index')
         else:
