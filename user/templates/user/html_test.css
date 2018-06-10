@@ -1,0 +1,23 @@
+div{
+    background-color: grey;
+    width: 200px;
+    height: 200px;
+    margin: 5px 10px 15px 20px;
+    padding: 5px 10px 15px 20px;
+    border:2px solid blue;
+    position: relative;
+    left: 20px;
+    top: 30px;
+}
+
+#myspan{
+    color: red;
+}
+
+.mystyle{
+    background-color: yellow;
+}
+
+img{
+    border: 1px solid grey;
+}
