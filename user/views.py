@@ -134,5 +134,5 @@ def user_search(request):
     else:
         conditions = request.POST.get('search_condition', '')
         return render(request, 'user/index.html', {
-            'users': User.search_users(conditions)
+            'users': User.objects.filter(name__contains=conditions)
         })
