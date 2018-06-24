@@ -14,4 +14,5 @@ urlpatterns = [
     path('user_delete/', views.user_delete, name="user_delete"),
     path('user_chpwd/', views.user_chpwd, name="user_chpwd"),
     path('user_search/', views.user_search, name="user_search"),
+    path('user_add_ajax/', views.user_add_ajax, name="user_add_ajax"),
 ]

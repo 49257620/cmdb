@@ -112,8 +112,8 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-sm-6 m-b-xs">
-
-                                    <button type="button" onclick="javascript:window.location.href='/user/user_add/'" class="btn btn-sm btn-primary"> 添加人员</button>
+                                    <!--<button type="button" onclick="javascript:window.location.href='/user/user_add/'" class="btn btn-sm btn-primary"> 添加人员</button>-->
+                                    <button type="button" id="user_add_btn" class="btn btn-sm btn-primary"> 添加人员</button>
                                     <button type="submit" class="btn btn-sm btn-warning"> 删除人员</button>
                                 </div>
                                 <div class="col-sm-2">
@@ -183,7 +183,95 @@
         </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="user_add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">添加新用户</h3>
+              </div>
+              <div class="modal-body">
+                    <div >
+                        <form method="post" id="user_add_form" action="#" class="form-horizontal">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-lg-4 control-label">ID</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" disabled="" name="uid" placeholder="由系统生成,无需填写" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">密码</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" placeholder="请输入您的密码" value="" name="password" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">密码确认</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" placeholder="请再次输入您的密码" value="" name="password_confirm"  required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的姓名" name="name" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">性别</label>
+                                    <div class="col-sm-8">
+                                        <div class="checkbox-inline i-checks"><label> <input type="radio" value="1"  checked="checked" name="sex"> <i></i> 男 </label></div>
+                                        <div class="checkbox-inline i-checks"><label> <input type="radio" value="0"  name="sex"> <i></i> 女 </label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">年龄</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的年龄" name="age" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">联系电话</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的电话" name="tel" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">个人简介</label>
+                                    <div class="col-sm-8">
+                                        <textarea  placeholder="请输入您的个人简介" name="remark" style="min-height: 100px" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="save_user_btn">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     <!-- Mainly scripts -->
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
@@ -212,7 +300,41 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-            $('#table_user').DataTable();
+            $('#table_user').DataTable(lang_data_table);
+            $('#user_add_btn').on('click',function(){
+                $('#user_add_modal').modal({
+                    show:true,
+                    keyboard: false,
+                    backdrop:false
+                });
+            });
+
+            $('#save_user_btn').on('click',function(){
+                var data = $('#user_add_form').serializeArray();
+                //console.log($('#user_add_form').serialize());
+                jQuery.post("{% url  'user:user_add_ajax' %}", data,function(result){
+                    //console.log(result);
+                    if (result.code == 403){
+                        swal(result.message, "","error");
+                    }else if(result.code == 400){
+                        error_msg = [];
+                        jQuery.each(result.result,function(k,v){
+                            error_msg.push(v);
+                        });
+                        swal(result.message, error_msg.join('\n'),"error");
+                    }else if(result.code == 200){
+                        swal({
+                              title: result.message,
+                              text: "",
+                              type: "success"
+                            },
+                            function(){
+                              window.location.reload();
+                            });
+                    }
+
+                },'json')
+            });
         });
     </script>
 

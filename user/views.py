@@ -1,7 +1,7 @@
 # encoding: utf-8
 from django.shortcuts import render, redirect
 
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 # from .modelsv3 import get_users, valid_login_model,valid_create_user,create_user,get_user,valid_update_user,update_user,delete_user,user_change_pwd_chk,update_user_password,search_users
 import time
 
@@ -135,4 +135,29 @@ def user_search(request):
         conditions = request.POST.get('search_condition', '')
         return render(request, 'user/index.html', {
             'users': User.objects.filter(name__contains=conditions)
+        })
+
+
+def user_add_ajax(request):
+    login_user = request.session.get('login_user')
+    if not login_user:
+        return JsonResponse({
+            'code': 403,
+            'message' : '未登陆',
+            'result' : {}
+        })
+
+    is_valid, user, errors = UserValidator.valid_create_user(request.POST)
+    if is_valid:
+        user.save()
+        return JsonResponse({
+            'code': 200,
+            'message': '保存成功',
+            'result': user.as_dict()
+        })
+    else:
+        return JsonResponse({
+            'code': 400,
+            'message': '数据错误',
+            'result': errors
         })
