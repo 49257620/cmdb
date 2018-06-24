@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -7,12 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/static/favicon.ico">
     <title>CMDB | User</title>
-
-    <link href="/static/user/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/user/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/static/user/css/plugins/iCheck/custom.css" rel="stylesheet">
-    <link href="/static/user/css/animate.css" rel="stylesheet">
-    <link href="/static/user/css/style.css" rel="stylesheet">
+    <link href="{% static 'bootstrap_study/bootstrap-3.3.7-dist/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
+    <!--<link href="/static/user/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/iCheck/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'DataTables-1.10.15/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'DataTables-1.10.15/media/css/jquery.dataTables.css' %}" rel="stylesheet">-->
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
 
 </head>
 
@@ -117,7 +122,7 @@
                                 <div class="col-sm-4"></div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table id="table_user" class="table table-striped">
                                     <thead>
                                     <tr>
 
@@ -181,21 +186,25 @@
 
 
     <!-- Mainly scripts -->
-    <script src="/static/user/js/jquery-3.1.1.min.js"></script>
-    <script src="/static/user/js/bootstrap.min.js"></script>
-    <script src="/static/user/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/static/user/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap_study/bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+<!--
+    <script src="/static/user/js/bootstrap.min.js"></script>-->
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
 
 
 
     <!-- Custom and plugin javascript -->
-    <script src="/static/user/js/inspinia.js"></script>
-    <script src="/static/user/js/plugins/pace/pace.min.js"></script>
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
 
     <!-- iCheck -->
-    <script src="/static/user/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/dataTables.bootstrap.js' %}"></script>
 
-
+    <script src="{% static 'sweetalert-1.0.1/dist/sweetalert.min.js' %}"></script>
 
     <script>
         $(document).ready(function(){
@@ -203,6 +212,7 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
+            $('#table_user').DataTable();
         });
     </script>
 

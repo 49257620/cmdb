@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>用户登陆</title>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link href="signin.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <form class="form-signin">
+        <h2 class="form-signin-heading">用户登陆</h2>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <strong>Warning!</strong> 用户名密码错误
+        </div>
+        <label for="inputEmail" class="sr-only">用户名：</label>
+        <input type="email" id="name" name="name" class="form-control" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">密码：</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="密码" required>
+        <button id='btn_save' class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
+        <button id='btn_2' class="btn btn-lg btn-primary btn-block" type="submit">提示</button>
+    </form>
+
+</div>
+
+</body>
+<script src="../js/jquery-3.1.1.min.js"></script>
+<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+<script src="js_test.js"></script>
+<script type="text/javascript">
+    //ID选择器
+    var name_obj = jQuery('#name')
+    //设置值
+    name_obj.val('lw');
+    console.log(name_obj.val());
+
+    //设置属性
+    console.log(name_obj.attr('placeholder'));
+    name_obj.attr('placeholder','111222333');
+    console.log(name_obj.attr('placeholder'));
+
+    //设置样式
+    var btn2_obj = $('#btn_2');
+    btn2_obj.removeClass('btn-primary').addClass('btn-warning');
+
+    //绑定事件
+    btn2_obj.on('click',function () {
+        alert(123);
+    })
+
+    //自动全部绑定事件 (event,selector,callback)
+    jQuery(document).on('click','button',function () {
+        alert('tttt');
+    })
+
+    //设置内容 html内容
+    var h2_obj = $('h2')
+    console.log(h2_obj.text());
+    h2_obj.text('测试测试');
+    h2_obj.html('<a href="">变更连接</a><button type="button">new</button>');
+    console.log(h2_obj.text());
+
+
+
+    //class选择器
+    jQuery('.form-control')
+    //tag选择器
+    jQuery('button')
+    //name（属性）选择器
+    jQuery('[name=password]')
+
+    //复合选择器
+    $('form button');
+    $('form').find('#btn_2')
+
+
+    //jQuery each
+    // function中
+    // 如果return true 则 continue
+    // 如果return false 则 break
+    var names = ['a','b','c','d'];
+    jQuery.each(names,function(i,v){
+        console.log([i,v]);
+    })
+
+    //js对象
+    var jsobjt={name:'lw',age:30};
+    jQuery.each(jsobjt,function(i,v){
+        console.log([i,v]);
+    })
+
+    //跳转页面
+    //window.location.replace('jquery_study.html')
+
+    //刷新页面
+    //window.location.reload()
+
+
+</script>
+</html>
