@@ -5,6 +5,8 @@
 from django.core.management import BaseCommand
 import json
 import shutil
+import os
+from django.conf import settings
 from collections import namedtuple
 from ansible.parsing.dataloader import DataLoader
 from ansible.vars.manager import VariableManager
@@ -13,6 +15,8 @@ from ansible.playbook.play import Play
 from ansible.executor.task_queue_manager import TaskQueueManager
 from ansible.plugins.callback import CallbackBase
 import ansible.constants as C
+
+from asset.models import Host
 
 
 class Command(BaseCommand):
@@ -29,18 +33,18 @@ class Command(BaseCommand):
 
         results_callback = ResultCallback()
 
-        inventory = InventoryManager(loader=loader, sources='./etc/hosts')  # 剧本的位置
+        inventory = InventoryManager(loader=loader, sources=os.path.join(settings.BASE_DIR, 'etc', 'hosts'))  # 剧本的位置
 
         variable_manager = VariableManager(loader=loader, inventory=inventory)
 
         # ansible all -i etc/hosts -m setup
         play_source = {
-            'name': "collect server info",
+            'name': "CMDB Collect",
             'hosts': 'all',  # 在哪些主机上执行
             'gather_facts': 'no',
             'tasks': [  # 执行的任务列表
                 {
-                    'name': 'fact',  # 任务名称
+                    'name': 'collect_server_info',  # 任务名称
                     'setup': ''  # 执行任务模块
                 }
             ]
@@ -68,6 +72,21 @@ class Command(BaseCommand):
 
 class ResultCallback(CallbackBase):
     def v2_runner_on_ok(self, result, **kwargs):
-        host = result._host
-        print(result.task_name)
-        print(json.dumps({host.name: result._result}, indent=4))
+        if result.task_name == 'collect_server_info':
+            self.collect_host(result._result)
+
+    def collect_host(self, result):
+        facts = result.get('ansible_facts', {})
+
+        ip = facts.get('ansible_default_ipv4', {}).get('address', '')
+        name = facts.get('ansible_nodename', '')
+        mac = facts.get('ansible_default_ipv4', {}).get('macaddress', '')
+        os = facts.get('ansible_os_family', '')
+        arch = facts.get('ansible_architecture', '')
+        mem = facts.get('ansible_memtotal_mb', '')
+        cpu = facts.get('ansible_processor_vcpus', '')
+
+        disk = [{'name': i.get('device'), 'total': int(i.get('size_total')) / 1024 / 1024} for i in
+                facts.get('ansible_mounts', [])]
+        # disk = {i.get('device') : int(i.get('size_total')) / 1024 / 1024 for i in facts.get('ansible_mounts', [])}
+        Host.create_or_replace(ip, name, mac, os, arch, mem, cpu, json.dumps(disk))
