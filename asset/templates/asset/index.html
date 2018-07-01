@@ -1,37 +1,23 @@
 {% extends "base.html" %}
-{% block title %} 用户管理 {% endblock %}
+{% block title %} 资产管理 {% endblock %}
 {% block content%}
     <div class="row" >
         <div class="col-lg-12" >
             <div class="ibox float-e-margins" >
                 <div class="ibox-title">
-                    <h5>用户管理 </h5>
+                    <h5>资产管理 </h5>
                     <div class="ibox-tools">
 
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-search"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user col-sm-2">
-                            <li>
-                                <div class="input-group" style="margin: 5px">
-                                    <form action="/user/index/" id="search_form" method="POST" class="input-group">
-                                        {% csrf_token %}
-                                        <input type="text" name="search_condition" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-sm btn-primary"> Go!</button> </span>
-                                    </form>
-                                </div>
-                            </li>
 
-                        </ul>
 
                     </div>
                 </div>
                 <div class="ibox-content">
                     <form method="post" action="/user/user_delete/" >
                     {% csrf_token %}
+                    <!--
                     <div class="row">
                         <div class="col-sm-6 m-b-xs">
-                            <!--<button type="button" onclick="javascript:window.location.href='/user/user_add/'" class="btn btn-sm btn-primary"> 添加人员</button>-->
                             <button type="button" id="user_add_btn" class="btn btn-sm btn-primary"> 添加人员</button>
                             <button type="submit" class="btn btn-sm btn-warning"> 删除人员</button>
                         </div>
@@ -40,6 +26,7 @@
                         </div>
                         <div class="col-sm-4"></div>
                     </div>
+                    -->
                     <div class="table-responsive">
                         <table id="table_user" class="table table-striped">
                             <thead>

@@ -1,0 +1,343 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <title>CMDB | User</title>
+    <link href="{% static 'bootstrap_study/bootstrap-3.3.7-dist/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
+    <!--<link href="/static/user/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/iCheck/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'DataTables-1.10.15/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'DataTables-1.10.15/media/css/jquery.dataTables.css' %}" rel="stylesheet">-->
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
+
+</head>
+
+<body style="background: #f3f3f4">
+
+    <div id="wrapper" >
+
+
+        <div  class="gray-bg" >
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="#">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome {{ request.session.login_user.name }}[{{ request.session.login_user.id }}] to CMDB Admin Console.</span>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="count-info"  href="{% url 'user:user_chpwd' %}">
+                        <i class="fa fa-address-card"></i>  修改密码
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{% url 'user:logout' %}">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div >
+            <div class="row wrapper border-bottom white-bg page-heading" >
+                <div class="col-lg-10">
+                    <h2>用户清单</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="#">CMDB</a>
+                        </li>
+                        <li>
+                            <a href="#">用户管理</a>
+                        </li>
+                        <li class="active">
+                            <strong>用户清单</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+        <div class="wrapper wrapper-content animated fadeInRight" >
+            <div class="row" >
+                <div class="col-lg-12" >
+                    <div class="ibox float-e-margins" >
+                        <div class="ibox-title">
+                            <h5>用户清单 </h5>
+                            <div class="ibox-tools">
+
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user col-sm-2">
+                                    <li>
+                                        <div class="input-group" style="margin: 5px">
+                                            <form action="/user/index/" id="search_form" method="POST" class="input-group">
+                                                {% csrf_token %}
+                                                <input type="text" name="search_condition" placeholder="Search" class="input-sm form-control"> <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-sm btn-primary"> Go!</button> </span>
+                                            </form>
+                                        </div>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form method="post" action="/user/user_delete/" >
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    <!--<button type="button" onclick="javascript:window.location.href='/user/user_add/'" class="btn btn-sm btn-primary"> 添加人员</button>-->
+                                    <button type="button" id="user_add_btn" class="btn btn-sm btn-primary"> 添加人员</button>
+                                    <button type="submit" class="btn btn-sm btn-warning"> 删除人员</button>
+                                </div>
+                                <div class="col-sm-2">
+
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="table_user" class="table table-striped">
+                                    <thead>
+                                    <tr>
+
+                                        <th></th>
+                                        <th>ID </th>
+                                        <th>姓名 </th>
+                                        <th>年龄 </th>
+                                        <th>性别 </th>
+                                        <th>电话 </th>
+                                        <th>简介 </th>
+                                        <th>修改 </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {%  for item in users  %}
+                                    <tr>
+                                        <td>
+                                            {% if request.session.login_user.id != item.id %}
+                                                <input type="checkbox"  value="{{ item.id }}" class="i-checks" name="del_users[]">
+                                            {% endif %}
+
+                                        </td>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.age }}</td>
+                                        <td>
+                                            {% if item.sex == 0 %}
+                                                女
+                                            {% elif item.sex == 1 %}
+                                                男
+                                            {% else  %}
+                                                未知
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.tel }}</td>
+                                        <td>{{ item.remark }}</td>
+                                        <td><a href="{% url 'user:user_update' %}?uid={{ item.id }}"><i class="fa fa-edit text-navy"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--
+        <div class="footer">
+
+            <div>
+                <strong>Copyright</strong> Free Copy &copy; 2018
+            </div>
+        </div>
+-->
+        </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="user_add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">添加新用户</h3>
+              </div>
+              <div class="modal-body">
+                    <div >
+                        <form method="post" id="user_add_form" action="#" class="form-horizontal">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-lg-4 control-label">ID</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" disabled="" name="uid" placeholder="由系统生成,无需填写" class="form-control" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">密码</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" placeholder="请输入您的密码" value="" name="password" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">密码确认</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" placeholder="请再次输入您的密码" value="" name="password_confirm"  required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的姓名" name="name" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">性别</label>
+                                    <div class="col-sm-8">
+                                        <div class="checkbox-inline i-checks"><label> <input type="radio" value="1"  checked="checked" name="sex"> <i></i> 男 </label></div>
+                                        <div class="checkbox-inline i-checks"><label> <input type="radio" value="0"  name="sex"> <i></i> 女 </label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">年龄</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的年龄" name="age" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">联系电话</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="请输入您的电话" name="tel" value="" required class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-11">
+                                    <label class="col-sm-4 control-label">个人简介</label>
+                                    <div class="col-sm-8">
+                                        <textarea  placeholder="请输入您的个人简介" name="remark" style="min-height: 100px" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="save_user_btn">保存</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Mainly scripts -->
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap_study/bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+<!--
+    <script src="/static/user/js/bootstrap.min.js"></script>-->
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- iCheck -->
+    <script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/dataTables.bootstrap.js' %}"></script>
+
+    <script src="{% static 'sweetalert-1.0.1/dist/sweetalert.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $('#table_user').DataTable(lang_data_table);
+            $('#user_add_btn').on('click',function(){
+                $('#user_add_modal').modal({
+                    show:true,
+                    keyboard: false,
+                    backdrop:false
+                });
+            });
+
+            $('#save_user_btn').on('click',function(){
+                var data = $('#user_add_form').serializeArray();
+                //console.log($('#user_add_form').serialize());
+                jQuery.post("{% url  'user:user_add_ajax' %}", data,function(result){
+                    //console.log(result);
+                    if (result.code == 403){
+                        swal(result.message, "","error");
+                    }else if(result.code == 400){
+                        error_msg = [];
+                        jQuery.each(result.result,function(k,v){
+                            error_msg.push(v);
+                        });
+                        swal(result.message, error_msg.join('\n'),"error");
+                    }else if(result.code == 200){
+                        swal({
+                              title: result.message,
+                              text: "",
+                              type: "success"
+                            },
+                            function(){
+                              window.location.reload();
+                            });
+                    }
+
+                },'json')
+            });
+        });
+    </script>
+
+</body>
+
+</html>

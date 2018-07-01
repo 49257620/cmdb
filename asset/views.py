@@ -4,5 +4,5 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse('asset:index')
+    return render(request,'asset/index.html')
 

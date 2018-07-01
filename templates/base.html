@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'bootstrap_study/bootstrap-3.3.7-dist/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
+    <!--<link href="/static/user/css/bootstrap.min.css" rel="stylesheet">-->
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/iCheck/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'DataTables-1.10.15/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'DataTables-1.10.15/media/css/jquery.dataTables.css' %}" rel="stylesheet">-->
+    <link href="{% static 'sweetalert-1.0.1/dist/sweetalert.css' %}" rel="stylesheet">
+    {% block link %}{% endblock %}
+</head>
+
+<body style="background: #f3f3f4">
+
+    <div id="wrapper" >
+
+
+        <div  class="gray-bg" >
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            <form role="search" class="navbar-form-custom" action="#">
+                <div class="form-group">
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">Welcome {{ request.session.login_user.name }}[{{ request.session.login_user.id }}] to CMDB Admin Console.</span>
+                </li>
+                <li class="dropdown">
+                    <a class="count-info" href="{% url 'user:index' %}">
+                        <i class="fa fa-user-circle"></i>  用户管理
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="count-info"  href="{% url 'asset:index' %}">
+                        <i class="fa fa-cubes"></i>  资产管理
+                    </a>
+                </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="count-info"  href="{% url 'user:user_chpwd' %}">
+                        <i class="fa fa-address-card"></i>  修改密码
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{% url 'user:logout' %}">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        </div >
+
+        <div class="wrapper wrapper-content animated fadeInRight" >
+            {% block content %}{% endblock %}
+        </div>
+        <!--
+        <div class="footer">
+
+            <div>
+                <strong>Copyright</strong> Free Copy &copy; 2018
+            </div>
+        </div>
+-->
+        </div>
+        </div>
+
+        {% block dialog %}{% endblock %}
+
+    <!-- Mainly scripts -->
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap_study/bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+<!--
+    <script src="/static/user/js/bootstrap.min.js"></script>-->
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+
+
+
+    <!-- Custom and plugin javascript -->
+    <script src="{% static 'js/inspinia.js' %}"></script>
+    <script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- iCheck -->
+    <script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'DataTables-1.10.15/media/js/dataTables.bootstrap.js' %}"></script>
+
+    <script src="{% static 'sweetalert-1.0.1/dist/sweetalert.min.js' %}"></script>
+    {% block script %}{% endblock %}
+    <script>
+        $(document).ready(function(){
+            {% block js %}{% endblock %}
+        });
+    </script>
+
+</body>
+
+</html>
