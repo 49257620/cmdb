@@ -81,7 +81,7 @@ class ResultCallback(CallbackBase):
         ip = facts.get('ansible_default_ipv4', {}).get('address', '')
         name = facts.get('ansible_nodename', '')
         mac = facts.get('ansible_default_ipv4', {}).get('macaddress', '')
-        os = facts.get('ansible_os_family', '')
+        os = facts.get('ansible_distribution', '')
         arch = facts.get('ansible_architecture', '')
         mem = facts.get('ansible_memtotal_mb', '')
         cpu = facts.get('ansible_processor_vcpus', '')
