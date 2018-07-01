@@ -90,7 +90,8 @@ var table = $('#table_asset').DataTable({
         {"data":"created_time"},
         {"data":"last_time"},
         {"data":function(row){
-            return '修改 删除';
+            return '<a class="btn btn-success btn-xs btn-edit-asset" href="javascript:void(0)" data-id="' + row['id'] + '">编辑</a>' +
+                ' <a class="btn btn-danger btn-xs btn-delete-asset" data-id="' + row['id'] + '" href="javascript:void(0)">删除</a>';
         }}
     ]});
 
