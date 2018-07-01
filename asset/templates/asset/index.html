@@ -7,206 +7,92 @@
                 <div class="ibox-title">
                     <h5>资产管理 </h5>
                     <div class="ibox-tools">
-
-
-
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <form method="post" action="/user/user_delete/" >
-                    {% csrf_token %}
-                    <!--
-                    <div class="row">
-                        <div class="col-sm-6 m-b-xs">
-                            <button type="button" id="user_add_btn" class="btn btn-sm btn-primary"> 添加人员</button>
-                            <button type="submit" class="btn btn-sm btn-warning"> 删除人员</button>
-                        </div>
-                        <div class="col-sm-2">
-
-                        </div>
-                        <div class="col-sm-4"></div>
-                    </div>
-                    -->
                     <div class="table-responsive">
-                        <table id="table_user" class="table table-striped">
+                        <table id="table_asset" class="table table-striped">
                             <thead>
                             <tr>
-
-                                <th></th>
-                                <th>ID </th>
-                                <th>姓名 </th>
-                                <th>年龄 </th>
-                                <th>性别 </th>
-                                <th>电话 </th>
-                                <th>简介 </th>
-                                <th>修改 </th>
+                                <th>名称(IP)</th>
+                                <th>操作系统 </th>
+                                <th>架构 </th>
+                                <th>内存 </th>
+                                <th>CPU </th>
+                                <th>MAC </th>
+                                <th>创建时间 </th>
+                                <th>最后时间 </th>
+                                <th>操作 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            {%  for item in users  %}
-                            <tr>
-                                <td>
-                                    {% if request.session.login_user.id != item.id %}
-                                        <input type="checkbox"  value="{{ item.id }}" class="i-checks" name="del_users[]">
-                                    {% endif %}
 
-                                </td>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.age }}</td>
-                                <td>
-                                    {% if item.sex == 0 %}
-                                        女
-                                    {% elif item.sex == 1 %}
-                                        男
-                                    {% else  %}
-                                        未知
-                                    {% endif %}
-                                </td>
-                                <td>{{ item.tel }}</td>
-                                <td>{{ item.remark }}</td>
-                                <td><a href="{% url 'user:user_update' %}?uid={{ item.id }}"><i class="fa fa-edit text-navy"></i></a></td>
-                            </tr>
-                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
 
     </div>
 {% endblock %}
-{% block dialog %}
-    <!-- Modal -->
-    <div class="modal fade" id="user_add_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h3 class="modal-title" id="myModalLabel">添加新用户</h3>
-          </div>
-          <div class="modal-body">
-                <div >
-                    <form method="post" id="user_add_form" action="#" class="form-horizontal">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-lg-4 control-label">ID</label>
-                                <div class="col-lg-8">
-                                    <input type="text" disabled="" name="uid" placeholder="由系统生成,无需填写" class="form-control" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">密码</label>
-                                <div class="col-sm-8">
-                                    <input type="password" placeholder="请输入您的密码" value="" name="password" required class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">密码确认</label>
-                                <div class="col-sm-8">
-                                    <input type="password" placeholder="请再次输入您的密码" value="" name="password_confirm"  required class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">姓名</label>
-                                <div class="col-sm-8">
-                                    <input type="text" placeholder="请输入您的姓名" name="name" value="" required class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">性别</label>
-                                <div class="col-sm-8">
-                                    <div class="checkbox-inline i-checks"><label> <input type="radio" value="1"  checked="checked" name="sex"> <i></i> 男 </label></div>
-                                    <div class="checkbox-inline i-checks"><label> <input type="radio" value="0"  name="sex"> <i></i> 女 </label></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">年龄</label>
-                                <div class="col-sm-8">
-                                    <input type="text" placeholder="请输入您的年龄" name="age" value="" required class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">联系电话</label>
-                                <div class="col-sm-8">
-                                    <input type="text" placeholder="请输入您的电话" name="tel" value="" required class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label">个人简介</label>
-                                <div class="col-sm-8">
-                                    <textarea  placeholder="请输入您的个人简介" name="remark" style="min-height: 100px" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" id="save_user_btn">保存</button>
-          </div>
-        </div>
-      </div>
-    </div>
-{% endblock %}
 {% block js %}
-    $('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green',
-    });
-    $('#table_user').DataTable(lang_data_table);
-    $('#user_add_btn').on('click',function(){
-        $('#user_add_modal').modal({
-            show:true,
-            keyboard: false,
-            backdrop:false
-        });
-    });
 
-    $('#save_user_btn').on('click',function(){
-        var data = $('#user_add_form').serializeArray();
-        //console.log($('#user_add_form').serialize());
-        jQuery.post("{% url  'user:user_add_ajax' %}", data,function(result){
-            //console.log(result);
-            if (result.code == 403){
-                swal(result.message, "","error");
-            }else if(result.code == 400){
-                error_msg = [];
-                jQuery.each(result.result,function(k,v){
-                    error_msg.push(v);
-                });
-                swal(result.message, error_msg.join('\n'),"error");
-            }else if(result.code == 200){
-                swal({
-                      title: result.message,
-                      text: "",
-                      type: "success"
-                    },
-                    function(){
-                      window.location.reload();
-                    });
-            }
 
-        },'json')
-    });
+var table = $('#table_asset').DataTable({
+    "language": {
+        "processing": "处理中...",
+        "lengthMenu": "显示 _MENU_ 项结果",
+        "zeroRecords": "没有匹配结果",
+        "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+        "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+        "infoFiltered": "(由 _MAX_ 项结果过滤)",
+        "infoPostFix": "",
+        "search": "搜索:",
+        "searchPlaceholder": "搜索...",
+        "url": "",
+        "emptyTable": "表中数据为空",
+        "loadingRecords": "载入中...",
+        "infoThousands": ",",
+        "paginate": {
+            "first": "首页",
+            "previous": "上页",
+            "next": "下页",
+            "last": "末页"
+        },
+        "aria": {
+            paginate: {
+                first: '首页',
+                previous: '上页',
+                next: '下页',
+                last: '末页'
+            },
+            "sortAscending": ": 以升序排列此列",
+            "sortDescending": ": 以降序排列此列"
+        },
+        "decimal": "-",
+        "thousands": "."
+    },
+    ajax:{
+        url:'{% url "asset:list_ajax" %}',
+        dataSrc:'result',
+    },
+    columns:[
+        {"data":function(row){
+            return row.name + '('+row.ip+')';
+        }},
+        {"data":"os"},
+        {"data":"arch"},
+        {"data":"mem"},
+        {"data":"cpu"},
+        {"data":"mac"},
+        {"data":"created_time"},
+        {"data":"last_time"},
+        {"data":function(row){
+            return '修改 删除';
+        }}
+    ]});
+
+
 {% endblock %}

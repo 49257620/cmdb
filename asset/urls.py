@@ -5,4 +5,5 @@ app_name = 'asset'
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('list_ajax/', views.list_ajax, name="list_ajax"),
 ]
