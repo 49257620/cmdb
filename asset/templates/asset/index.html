@@ -75,40 +75,84 @@ var table = $('#table_asset').DataTable({
         {"data":function(row){
             return '<a class="btn btn-success btn-xs btn-edit-asset" href="javascript:void(0)" data-id="' + row['id'] + '">编辑</a>' +
                 ' <a class="btn btn-danger btn-xs btn-delete-asset" data-id="' + row['id'] + '" href="javascript:void(0)">删除</a>' +
-                ' <a class="btn btn-warning btn-xs btn-monitor-asset" data-id="' + row['id'] + '" href="javascript:void(0)">监控</a>';
+                ' <a class="btn btn-warning btn-xs btn-monitor-asset" data-id="' + row['ip'] + '" href="javascript:void(0)">监控</a>';
         }}
     ]});
-
-    $('#table_asset').on('click','.btn-monitor-asset',function(){
-        $('#monitor_modal').modal('show');
-    })
 
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
 
-    // 指定图表的配置项和数据
-    var option = {
+    var chart_option = {
         title: {
-            text: 'ECharts 入门示例'
+            text: 'CPU,内存使用率'
         },
-        tooltip: {},
+        tooltip: {
+            trigger: 'axis'
+        },
         legend: {
-            data:['销量']
+            data:['CPU','MEM']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                //saveAsImage: {}
+            }
         },
         xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            type: 'category',
+            boundaryGap: false,
+            data: []
         },
-        yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-        }]
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'CPU',
+                type:'line',
+                stack: 'CPU',
+                data:[]
+            },
+            {
+                name:'MEM',
+                type:'line',
+                stack: 'MEM',
+                data:[]
+            }
+        ]
     };
+    // 动态绑定table的点击事件
+    $('#table_asset').on('click','.btn-monitor-asset',function(){
+        ip = jQuery(this).attr('data-id');
+        data = {'ip':ip};
+        jQuery.get("{% url  'asset:monitor_ajax' %}", data,function(result){
+            //console.log(result);
+            if (result.code == 403){
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+            }else if(result.code == 400){
+
+            }else if(result.code == 200){
+                var xAxis = result.result.xAxis;
+                var CPU_data = result.result.cpu;
+                var MEM_data = result.result.mem;
+
+                chart_option['xAxis']['data'] = xAxis;
+                chart_option['series'][0]['data'] = CPU_data;
+                chart_option['series'][1]['data'] = MEM_data;
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(chart_option);
+            }
+
+        },'json')
 
 
+        $('#monitor_modal').modal('show');
+    })
 
 {% endblock %}
