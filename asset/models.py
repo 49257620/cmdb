@@ -65,3 +65,18 @@ class Host(models.Model):
         host.save()
 
         return host
+
+
+class Resource(models.Model):
+    ip = models.GenericIPAddressField(null=False, default='')
+    cpu = models.FloatField(null=False, default=0)
+    mem = models.FloatField(null=False, default=0)
+    collect_time = models.DateTimeField(null=False,auto_now_add=True)
+
+    def as_dict(self):
+        return {
+            'ip': self.ip,
+            'cpu': self.cpu,
+            'mem': self.mem,
+            'collect_time': self.collect_time
+        }
