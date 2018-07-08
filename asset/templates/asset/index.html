@@ -126,10 +126,11 @@ var table = $('#table_asset').DataTable({
             }
         ]
     };
-    // 动态绑定table的点击事件
-    $('#table_asset').on('click','.btn-monitor-asset',function(){
-        ip = jQuery(this).attr('data-id');
-        data = {'ip':ip};
+
+    var th = null;
+
+    function load_data(ip){
+        data = {'ip':ip,'_': (new Date().getTime())};
         jQuery.get("{% url  'asset:monitor_ajax' %}", data,function(result){
             //console.log(result);
             if (result.code == 403){
@@ -150,9 +151,25 @@ var table = $('#table_asset').DataTable({
             }
 
         },'json')
+    }
 
-
+    // 动态绑定table的点击事件
+    $('#table_asset').on('click','.btn-monitor-asset',function(){
+        ip = jQuery(this).attr('data-id');
+        load_data(ip);
+        if (th === null){
+            th = setInterval(function(){
+                    load_data(ip);
+                },60*1000);
+        }
         $('#monitor_modal').modal('show');
+    })
+
+    $('#monitor_modal').on('hidden.bs.modal',function(e){
+        if(th!==null){
+            clearInterval(th);
+            th = null;
+        }
     })
 
 {% endblock %}
