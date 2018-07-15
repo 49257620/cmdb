@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 import os
 from django.conf import settings
 import time
-from .models import AccessLogFile
+from .models import AccessLogFile,AccessLog
 import json
 
 
@@ -30,3 +30,16 @@ def upload(request):
         #print({'file_id': log_file.id, 'path': upload_path})
         fh.write(json.dumps({'file_id': log_file.id, 'path': upload_path}))
     return HttpResponse('upload ok')
+
+
+def pie_data(request):
+    print(request.GET.get('id'))
+    legend,series = AccessLog.get_pie_data(AccessLog,id=request.GET.get('id'))
+
+    return JsonResponse({"code":200,"result":{"legend":legend,"series":series}})
+
+def bar_data(request):
+    print(request.GET.get('id'))
+    x,y = AccessLog.get_bar_data(AccessLog,id=request.GET.get('id'))
+
+    return JsonResponse({"code":200,"result":{"x":x,"y":y}})

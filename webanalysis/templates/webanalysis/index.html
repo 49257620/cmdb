@@ -19,16 +19,14 @@
                         <div class="row">
                             <div class="form-group col-sm-11">
                                 <label class="col-sm-4 control-label">上传文件</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-6">
                                     <input type="file" placeholder="请上传文件" name="log_file" value="" required class="form-control">
                                 </div>
-                            </div>
-                            <div class="form-group col-sm-11">
-                                <label class="col-sm-4 control-label"></label>
-                                <div class="col-sm-8">
-                                    <button type="submit">上传</button>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-primary">上传</button>
                                 </div>
                             </div>
+
                         </div>
 
                     </form>
@@ -41,9 +39,9 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                             <i class="fa fa-search"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-user">
+                        <ul class="dropdown-menu dropdown-user" id="memuselect">
                             {%  for item in files  %}
-                                <li><a href="javascript:void(0)">{{ item.name }}</a></li>
+                                <li data-id="{{ item.id }}"><a href="javascript:void(0)"  >{{ item.name }}</a></li>
                             {% endfor %}
                         </ul>
 
@@ -108,8 +106,8 @@
     <script src="{% static 'js/echart27/echarts-all.js' %}"></script>
 {% endblock %}
 {% block js %}
-    var chart1 = echarts.init(document.getElementById('chart1'));
-    var chart2 = echarts.init(document.getElementById('chart2'));
+
+
     var chart3 = echarts.init(document.getElementById('chart3'));
 
     var option1 = {
@@ -136,7 +134,7 @@
             calculable : true,
             series : [
                 {
-                    name:'访问来源',
+                    name:'访问状态',
                     type:'pie',
                     radius : '55%',
                     center: ['50%', '60%'],
@@ -189,8 +187,37 @@
         };
     var option3 = '';
 
-    chart1.setOption(option1);
-    chart2.setOption(option2);
 
 
+    function load_pie(id){
+        $.get('{% url "webanalysis:pie_data" %}',{id:id},function(result){
+            console.log(result);
+            option1['legend']['data'] = result['result']['legend'];
+            option1['series'][0]['data'] = result['result']['series'];
+            var chart1 = echarts.init(document.getElementById('chart1'));
+            chart1.setOption(option1);
+        },'json')
+    }
+
+    function load_bar(id){
+        $.get('{% url "webanalysis:bar_data" %}',{id:id},function(result){
+            console.log(result);
+            option2['xAxis'][0]['data'] = result['result']['x'];
+            option2['series'][0]['data'] = result['result']['y'];
+            var chart2 = echarts.init(document.getElementById('chart2'));
+            chart2.setOption(option2);
+        },'json')
+    }
+
+    function loadData(){
+        id = $(this).data('id');
+
+        load_pie(id);
+        load_bar(id);
+    }
+
+
+    //console.log($('#memuselect').find('li')[0]);
+    $($('#memuselect').find('li')).on('click',loadData);
+    $('#memuselect').find('li')[0].click();
 {% endblock %}
