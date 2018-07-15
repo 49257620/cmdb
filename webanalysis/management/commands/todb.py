@@ -19,12 +19,12 @@ class Command(BaseCommand):
                 notice = json.loads(fh.read())
 
             try:
-                self.parse(notice)
+                self.parse_notice(notice)
             except BaseException as e:
                 print(e)
             os.unlink(path_notice)
 
-    def parse(self, notice):
+    def parse_notice(self, notice):
         with open(notice['path'], 'rt', encoding='utf-8') as fh:
             for line in fh.readlines():
                 line_info = line.split()
