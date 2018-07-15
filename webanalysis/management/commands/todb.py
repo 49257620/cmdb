@@ -3,8 +3,9 @@
 # author = ‘LW’
 
 from django.core.management import BaseCommand
-import json, os, time
+import json, os, datetime
 from django.conf import settings
+from webanalysis.models import AccessLog
 
 
 class Command(BaseCommand):
@@ -17,8 +18,20 @@ class Command(BaseCommand):
             with open(path_notice, 'rt', encoding='utf-8') as fh:
                 notice = json.loads(fh.read())
 
-            self.parse(notice)
+            try:
+                self.parse(notice)
+            except BaseException as e:
+                print(e)
             os.unlink(path_notice)
 
     def parse(self, notice):
-        print(notice)
+        with open(notice['path'], 'rt', encoding='utf-8') as fh:
+            for line in fh.readlines():
+                line_info = line.split()
+                ptime = datetime.datetime.strptime(line_info[3], "[%d/%b/%Y:%H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
+                # print(notice['file_id'], line_info[0], line_info[6], line_info[8],ptime)
+                log = AccessLog(file_id=notice['file_id'], ip=line_info[0], url=line_info[6], status_code=line_info[8],
+                                access_time=ptime)
+                log.save()
+
+            print('parse over :', notice['file_id'])
