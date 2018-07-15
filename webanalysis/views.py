@@ -1,14 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 import os
 from django.conf import settings
 import time
 from .models import AccessLogFile,AccessLog
 import json
+from functools import wraps
 
 
 # Create your views here.
 
+def login_chek(func):
+    @wraps(func)
+    def wrapper(request,*args,**kwargs):
+        if request.session.get('login_user') is None:
+            if request.is_ajax():
+                return JsonResponse({
+                    'code': 403,
+                    'message' : '未登陆',
+                    'result' : {}
+                })
+            return redirect("user:login")
+        return func(request,*args,**kwargs)
+
+    return wrapper
+
+@login_chek
 def index(request):
     files = AccessLogFile.objects.filter(status=0).order_by('-created_time')[:5]
     return render(request, 'webanalysis/index.html',{
