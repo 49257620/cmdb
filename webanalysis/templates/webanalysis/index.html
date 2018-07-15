@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %} 日志分析 {% endblock %}
+{% block link %}
+    <link href="{% static 'js/echart27/asset/css/echartsHome.css' %}" rel="stylesheet">
+{% endblock %}
 {% block content%}
     <div class="row" >
         <div class="col-lg-12" >
@@ -31,6 +34,68 @@
                     </form>
                 </div>
             </div>
+            <div class="ibox float-e-margins" >
+                <div class="ibox-title">
+                    <h5>日志分析-1 </h5>
+                    <div class="ibox-tools">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            {%  for item in files  %}
+                                <li><a href="javascript:void(0)">{{ item.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>返回代码</h5>
+                                    <div class="ibox-tools">
+
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                        <div class="flot-chart main" id="chart1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>每日访问量</h5>
+                                    <div class="ibox-tools">
+
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                        <div class="flot-chart main" id="chart2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>地图</h5>
+                                    <div class="ibox-tools">
+
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                        <div class="flot-chart"  id="chart3"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+            </div>
         </div>
 
     </div>
@@ -43,6 +108,89 @@
     <script src="{% static 'js/echart27/echarts-all.js' %}"></script>
 {% endblock %}
 {% block js %}
+    var chart1 = echarts.init(document.getElementById('chart1'));
+    var chart2 = echarts.init(document.getElementById('chart2'));
+    var chart3 = echarts.init(document.getElementById('chart3'));
+
+    var option1 = {
+            title : {
+                text: '访问状态码',
+                subtext: '',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:['404','500','200','301']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:335, name:'404'},
+                        {value:310, name:'500'},
+                        {value:234, name:'200'},
+                        {value:135, name:'301'}
+                    ]
+                }
+            ]
+        };
+    var option2 = {
+            title : {
+                text: '每日访问量',
+                subtext: ''
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['访问量']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'访问量',
+                    type:'bar',
+                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+
+                }
+            ]
+        };
+    var option3 = '';
+
+    chart1.setOption(option1);
+    chart2.setOption(option2);
 
 
 {% endblock %}

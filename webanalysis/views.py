@@ -10,7 +10,10 @@ import json
 # Create your views here.
 
 def index(request):
-    return render(request, 'webanalysis/index.html')
+    files = AccessLogFile.objects.filter(status=0).order_by('-created_time')[:5]
+    return render(request, 'webanalysis/index.html',{
+            'files': files
+        })
 
 
 def upload(request):
