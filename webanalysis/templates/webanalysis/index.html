@@ -9,7 +9,7 @@
         <div class="col-lg-12" >
             <div class="ibox float-e-margins" >
                 <div class="ibox-title">
-                    <h5>日志分析 </h5>
+                    <h5>日志分析-上传 </h5>
                     <div class="ibox-tools">
                     </div>
                 </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="ibox float-e-margins" >
                 <div class="ibox-title">
-                    <h5>日志分析-1 </h5>
+                    <h5>日志分析-图表 <small id="file_name"></small></h5>
                     <div class="ibox-tools">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                             <i class="fa fa-search"></i>
@@ -76,8 +76,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
+
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
@@ -87,12 +87,13 @@
                                     </div>
                                 </div>
                                 <div class="ibox-content">
-                                        <div class="flot-chart"  id="chart3"></div>
+                                        <div class="flot-chart main"  id="chart3"></div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                </div>
             </div>
         </div>
 
@@ -191,7 +192,7 @@
 
     function load_pie(id){
         $.get('{% url "webanalysis:pie_data" %}',{id:id},function(result){
-            console.log(result);
+            //console.log(result);
             option1['legend']['data'] = result['result']['legend'];
             option1['series'][0]['data'] = result['result']['series'];
             var chart1 = echarts.init(document.getElementById('chart1'));
@@ -201,7 +202,7 @@
 
     function load_bar(id){
         $.get('{% url "webanalysis:bar_data" %}',{id:id},function(result){
-            console.log(result);
+            //console.log(result);
             option2['xAxis'][0]['data'] = result['result']['x'];
             option2['series'][0]['data'] = result['result']['y'];
             var chart2 = echarts.init(document.getElementById('chart2'));
@@ -211,7 +212,8 @@
 
     function loadData(){
         id = $(this).data('id');
-
+        $('#file_name').text('('+$(this).find('a').html()+')');
+        //console.log($(this).find('a').html());
         load_pie(id);
         load_bar(id);
     }
