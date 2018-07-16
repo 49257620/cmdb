@@ -3,7 +3,7 @@ from django.http import HttpResponse,JsonResponse
 import os
 from django.conf import settings
 import time
-from .models import AccessLogFile,AccessLog
+from .models import AccessLogFile,AccessLog,AccessLogIps
 import json
 from functools import wraps
 
@@ -60,3 +60,9 @@ def bar_data(request):
     x,y = AccessLog.get_bar_data(AccessLog,id=request.GET.get('id'))
 
     return JsonResponse({"code":200,"result":{"x":x,"y":y}})
+
+
+def sync_ips(request):
+    AccessLogIps.syncIp()
+
+    return JsonResponse({"code":200,"result":'同步成功'})

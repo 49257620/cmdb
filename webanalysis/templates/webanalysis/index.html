@@ -24,6 +24,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="submit" class="btn btn-primary">上传</button>
+                                    <button type="button" class="btn btn-warning" id="sync_ip_btn">同步IP</button>
                                 </div>
                             </div>
 
@@ -34,7 +35,7 @@
             </div>
             <div class="ibox float-e-margins" >
                 <div class="ibox-title">
-                    <h5>日志分析-图表 <small id="file_name"></small></h5>
+                    <h5>日志分析-图表 <small id="file_name"></small> </h5>
                     <div class="ibox-tools">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                             <i class="fa fa-search"></i>
@@ -218,8 +219,16 @@
         load_bar(id);
     }
 
+    function syncIps(){
+        $.get('{% url "webanalysis:sync_ips" %}',null,function(result){
+            alert('同步成功');
+
+        },'json')
+    }
+
 
     //console.log($('#memuselect').find('li')[0]);
     $($('#memuselect').find('li')).on('click',loadData);
     $('#memuselect').find('li')[0].click();
+    $('#sync_ip_btn').on('click',syncIps);
 {% endblock %}

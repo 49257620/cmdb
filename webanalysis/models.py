@@ -1,4 +1,7 @@
-from django.db import models,connection
+from django.db import models, connection
+import geoip2.database
+import os
+from django.conf import settings
 
 
 # Create your models here.
@@ -18,7 +21,7 @@ class AccessLog(models.Model):
     access_time = models.DateTimeField(null=False)
 
     @staticmethod
-    def get_pie_data(cls,id):
+    def get_pie_data(cls, id):
         sql = """
         select status_code ,count(*) from webanalysis_accesslog
         where file_id= %s
@@ -31,9 +34,9 @@ class AccessLog(models.Model):
         series = []
         for x in result:
             legend.append(str(x[0]))
-            series.append({"name":str(x[0]),"value":str(x[1])})
+            series.append({"name": str(x[0]), "value": str(x[1])})
 
-        return legend,series
+        return legend, series
 
     @staticmethod
     def get_bar_data(cls, id):
@@ -61,3 +64,36 @@ class AccessLogIps(models.Model):
     city = models.CharField(max_length=256, null=False, default='')
     latitude = models.FloatField(null=False, default=0)
     longitude = models.FloatField(null=False, default=0)
+
+    @classmethod
+    def syncIp(cls):
+        sql = """
+                    select DISTINCT IP from webanalysis_accesslog a where not exists( select * from webanalysis_accesslogips b where a.ip = b.ip  )
+              """
+        cur = connection.cursor()
+        cur.execute(sql)
+        result = cur.fetchall()
+
+        db_path = os.path.join(settings.BASE_DIR,'etc','GeoLite2-City.mmdb')
+        for n in result:
+            ip = n[0]
+            with geoip2.database.Reader(db_path) as reader:
+                try:
+                    response = reader.city(ip)
+                    obj = AccessLogIps()
+                    obj.ip = ip
+                    obj.city = response.city.names.get('zh-CN', response.city.names.get('en'))
+                    obj.latitude = response.location.latitude
+                    obj.longitude = response.location.longitude
+                    obj.save()
+                except BaseException as e:
+                    print(ip,e)
+                    obj = AccessLogIps()
+                    obj.ip = ip
+                    obj.city = 'N/A'
+                    obj.latitude = 0
+                    obj.longitude = 0
+                    obj.save()
+        cur.close();
+
+
