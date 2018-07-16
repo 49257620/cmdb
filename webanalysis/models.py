@@ -54,3 +54,10 @@ class AccessLog(models.Model):
             y.append(n[1])
 
         return x, y
+
+
+class AccessLogIps(models.Model):
+    ip = models.GenericIPAddressField(null=False, default='0.0.0.0')
+    city = models.CharField(max_length=256, null=False, default='')
+    latitude = models.FloatField(null=False, default=0)
+    longitude = models.FloatField(null=False, default=0)
