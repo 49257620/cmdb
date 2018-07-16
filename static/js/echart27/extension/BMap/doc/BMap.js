@@ -94,29 +94,7 @@ function focusGraphic() {
     }
 }
 
-var editor = CodeMirror.fromTextArea(
-    document.getElementById("code"),
-    { lineNumbers: true }
-);
-editor.setOption("theme", 'monokai');
 
-
-editor.on('change', function(){needRefresh = true;});
-
-function refresh(isBtnRefresh){
-    require(['BMap'], function(mapEx){
-        BMapExtension = mapEx;
-        if (isBtnRefresh) {
-            needRefresh = true;
-            focusGraphic();
-            return;
-        }
-        needRefresh = false;
-        
-        domMessage.innerHTML = '';
-        (new Function(editor.doc.getValue()))();
-    });
-}
 
 function needMap() {
     var href = location.href;
