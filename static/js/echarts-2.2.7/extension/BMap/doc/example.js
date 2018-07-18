@@ -1,12 +1,12 @@
 ﻿(function () {
     require.config({
         paths: {
-            echarts: '../../../doc/example/www/js'
+            echarts: "../../../doc/example/www/js"
         },
         packages: [
             {
                 name: 'BMap',
-                location: '../src',
+                location: '../static/js/echarts-2.2.7/extension/BMap/src',
                 main: 'main'
             }
         ]
@@ -20,8 +20,8 @@
     ],
     function (echarts, BMapExtension) {
         $('#main').css({
-            height:$('body').height(),
-            width: $('body').width()
+            height:$('#main').height(),
+            width: $('#main').width()
         });
 
         // 初始化地图

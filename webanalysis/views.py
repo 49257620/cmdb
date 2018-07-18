@@ -66,3 +66,10 @@ def sync_ips(request):
     AccessLogIps.syncIp()
 
     return JsonResponse({"code":200,"result":'同步成功'})
+
+
+def map_data(request):
+    print(request.GET.get('id'))
+    x,y,z = AccessLog.get_map_data(AccessLog,id=request.GET.get('id'))
+
+    return JsonResponse({"code":200,"result":{"x":x,"y":y,"z":z}})

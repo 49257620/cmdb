@@ -58,6 +58,29 @@ class AccessLog(models.Model):
 
         return x, y
 
+    @staticmethod
+    def get_map_data(cls, id):
+        sql = """
+                select a.CITY,a.latitude,a.longitude,count(b.id)
+                from webanalysis_accesslog b,webanalysis_accesslogips a
+                where b.file_id=%s
+                and a.city !='N/A'
+                and b.ip = a.ip
+                GROUP BY a.CITY,a.latitude,a.longitude
+                """
+        cur = connection.cursor()
+        cur.execute(sql, (id,))
+        result = cur.fetchall()
+        x = {}
+        y = []
+        z = []
+        for n in result:
+            x[n[0]] = [n[2], n[1]]
+            y.append([{'name': n[0]}, {'name': '北京', 'value': n[3]}])
+            z.append({'name': n[0], 'value': n[3]})
+
+        return x, y, z
+
 
 class AccessLogIps(models.Model):
     ip = models.GenericIPAddressField(null=False, default='0.0.0.0')
@@ -95,5 +118,8 @@ class AccessLogIps(models.Model):
                     obj.longitude = 0
                     obj.save()
         cur.close();
+
+
+
 
 

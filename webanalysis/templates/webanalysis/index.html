@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="ibox-content">
-                                        <div class="flot-chart main"  id="chart3"></div>
+                                        <div class="flot-chart"  id="main" style="height: 500px"></div>
                                 </div>
                             </div>
                         </div>
@@ -105,9 +105,14 @@
 {% endblock %}
 {% block script %}
         <!-- echart -->
-
     <script src="{% static 'js/echarts-2.2.7/build/dist/echarts-all.js' %}"></script>
+    <script src="{% static 'js/echarts-2.2.7/doc/example/www/js/echarts.js' %}"></script>
+    <script src="{% static 'js/echarts-2.2.7/doc/example/www/js/chart/map.js' %}"></script>
+    <script src="{% static 'js/echart27/extension/BMap/src/main.js' %}"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
     <!--
+        <script src="{% static 'js/echarts-2.2.7/extension/BMap/doc/example.js' %}"></script>
+    <script src="{% static 'js/echarts-2.2.7/build/dist/echarts-all.js' %}"></script>
     <script src="{% static 'js/echart27/extension/BMap/src/main.js' %}"></script>
     <script src="{% static 'js/echarts-2.2.7/extension/BMap/doc/BMap.js' %}"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
@@ -194,12 +199,27 @@
                 }
             ]
         };
-    var option3 = {
+    require.config({
+        paths: {
+            echarts: "{% static 'js/echarts-2.2.7/doc/example/www/js/echarts.js' %}"
+        },
+        packages: [
+            {
+                name: 'BMap',
+                location: "{% static 'js/echarts-2.2.7/extension/BMap/src' %}",
+                main: 'main'
+            }
+        ]
+    });
+    option = {
             color: ['gold','aqua','lime'],
             title : {
-                text: '模拟迁徙',
-                subtext:'数据纯属虚构',
-                x:'right'
+                text: '访问来源',
+                subtext:'',
+                x:'center',
+                textStyle : {
+                    color: '#fff'
+                }
             },
             tooltip : {
                 trigger: 'item',
@@ -213,7 +233,9 @@
                 data:['北京'],
                 selectedMode: 'single',
                 selected:{
-
+                },
+                textStyle : {
+                    color: '#fff'
                 }
             },
             toolbox: {
@@ -221,10 +243,17 @@
             },
             dataRange: {
                 min : 0,
-                max : 100,
-                y: '60%',
+                max : 10000,
+                range: {
+                    start: 10,
+                    end: 9999
+                },
+                x: 'right',
                 calculable : true,
-                color: ['#ff3333', 'orange', 'yellow','lime','aqua']
+                color: ['#ff3333', 'orange', 'yellow','lime','aqua'],
+                textStyle:{
+                    color:'#fff'
+                }
             },
             series : [
                 {
@@ -233,7 +262,17 @@
                     mapType: 'none',
                     data:[],
                     geoCoord: {
-
+                        '北京': [116.4551,40.2539],
+                        '上海': [121.4648,31.2891],
+                        '广州': [113.5107,23.2196],
+                        '大连': [122.2229,39.4409],
+                        '南宁': [108.479,23.1152],
+                        '南昌': [116.0046,28.6633],
+                        '拉萨': [91.1865,30.1465],
+                        '长春': [125.8154,44.2584],
+                        '包头': [110.3467,41.4899],
+                        '重庆': [107.7539,30.1904],
+                        '常州': [119.4543,31.5582]
                     },
 
                     markLine : {
@@ -251,47 +290,30 @@
                                 lineStyle: {
                                     type: 'solid',
                                     shadowBlur: 10
+                                },
+                            label: {
+                                    show: false
                                 }
                             }
                         },
                         data : [
-                            [{name:'上海'}, {name:'北京',value:115}],
-                            [{name:'乌鲁木齐'}, {name:'北京',value:10}],
-                            [{name:'兰州'}, {name:'北京',value:71}],
-                            [{name:'北京'}, {name:'北京',value:278}],
-                            [{name:'南京'}, {name:'北京',value:36}],
-                            [{name:'南进'}, {name:'北京',value:26}],
-                            [{name:'合肥'}, {name:'北京',value:10}],
-                            [{name:'哈尔滨'}, {name:'北京',value:6}],
-                            [{name:'嘉兴'}, {name:'北京',value:18}],
-                            [{name:'天津'}, {name:'北京',value:21}],
-                            [{name:'太原'}, {name:'北京',value:21}],
-                            [{name:'宁波'}, {name:'北京',value:10}],
-                            [{name:'广州'}, {name:'北京',value:55}],
-                            [{name:'成都'}, {name:'北京',value:79}],
-                            [{name:'杭州'}, {name:'北京',value:31}],
-                            [{name:'武汉'}, {name:'北京',value:26}],
-                            [{name:'沈阳'}, {name:'北京',value:6}],
-                            [{name:'河北'}, {name:'北京',value:17}],
-                            [{name:'济南'}, {name:'北京',value:19}],
-                            [{name:'深圳市'}, {name:'北京',value:16}],
-                            [{name:'湖陂'}, {name:'北京',value:11}],
-                            [{name:'福州市'}, {name:'北京',value:27}],
-                            [{name:'西宁'}, {name:'北京',value:9}],
-                            [{name:'西安'}, {name:'北京',value:19}],
-                            [{name:'贵阳'}, {name:'北京',value:63}],
-                            [{name:'郑州'}, {name:'北京',value:89}],
-                            [{name:'重庆'}, {name:'北京',value:51}],
-                            [{name:'长春'}, {name:'北京',value:14}],
-                            [{name:'长沙市'}, {name:'北京',value:14}],
-                            [{name:'阿姆斯特丹'}, {name:'北京',value:14}],
-                            [{name:'雷德蒙德'}, {name:'北京',value:7}]
+                            [{name:'上海'}, {name:'北京',value:95}],
+                            [{name:'广州'}, {name:'北京',value:90}],
+                            [{name:'大连'}, {name:'北京',value:80}],
+                            [{name:'南宁'}, {name:'北京',value:70}],
+                            [{name:'南昌'}, {name:'北京',value:60}],
+                            [{name:'拉萨'}, {name:'北京',value:50}],
+                            [{name:'长春'}, {name:'北京',value:40}],
+                            [{name:'包头'}, {name:'北京',value:30}],
+                            [{name:'重庆'}, {name:'北京',value:20}],
+                            [{name:'常州'}, {name:'北京',value:10}],
+                            [{name:'北京'}, {name:'北京',value:10}]
                         ]
                     },
                     markPoint : {
                         symbol:'emptyCircle',
                         symbolSize : function (v){
-                            return 10 + v/10
+                            return 10 + v/500
                         },
                         effect : {
                             show: true,
@@ -299,47 +321,208 @@
                         },
                         itemStyle:{
                             normal:{
-                                label:{show:false}
+                                label:{show:true}
                             }
                         },
                         data : [
-                            {name:'上海',value:115},
-                            {name:'乌鲁木齐',value:10},
-                            {name:'兰州',value:71},
-                            {name:'北京',value:278},
-                            {name:'南京',value:36},
-                            {name:'南进',value:26},
-                            {name:'合肥',value:10},
-                            {name:'哈尔滨',value:6},
-                            {name:'嘉兴',value:18},
-                            {name:'天津',value:21},
-                            {name:'太原',value:21},
-                            {name:'宁波',value:10},
-                            {name:'广州',value:55},
-                            {name:'成都',value:79},
-                            {name:'杭州',value:31},
-                            {name:'武汉',value:26},
-                            {name:'沈阳',value:6},
-                            {name:'河北',value:17},
-                            {name:'济南',value:19},
-                            {name:'深圳市',value:16},
-                            {name:'湖陂',value:11},
-                            {name:'福州市',value:27},
-                            {name:'西宁',value:9},
-                            {name:'西安',value:19},
-                            {name:'贵阳',value:63},
-                            {name:'郑州',value:89},
-                            {name:'重庆',value:51},
-                            {name:'长春',value:14},
-                            {name:'长沙市',value:14},
-                            {name:'阿姆斯特丹',value:14},
-                            {name:'雷德蒙德',value:7}
+                            {name:'上海',value:95},
+                            {name:'广州',value:90},
+                            {name:'大连',value:80},
+                            {name:'南宁',value:70},
+                            {name:'南昌',value:60},
+                            {name:'拉萨',value:50},
+                            {name:'长春',value:40},
+                            {name:'包头',value:30},
+                            {name:'重庆',value:20},
+                            {name:'常州',value:10},
+                            {name:'北京',value:10}
                         ]
                     }
 
                 }
             ]
         };
+
+    mapstyle = {
+            styleJson: [
+                  {
+                       "featureType": "water",
+                       "elementType": "all",
+                       "stylers": {
+                            "color": "#044161"
+                       }
+                  },
+                  {
+                       "featureType": "land",
+                       "elementType": "all",
+                       "stylers": {
+                            "color": "#004981"
+                       }
+                  },
+                  {
+                       "featureType": "boundary",
+                       "elementType": "geometry",
+                       "stylers": {
+                            "color": "#064f85"
+                       }
+                  },
+                  {
+                       "featureType": "railway",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "highway",
+                       "elementType": "geometry",
+                       "stylers": {
+                            "color": "#004981"
+                       }
+                  },
+                  {
+                       "featureType": "highway",
+                       "elementType": "geometry.fill",
+                       "stylers": {
+                            "color": "#005b96",
+                            "lightness": 1
+                       }
+                  },
+                  {
+                       "featureType": "highway",
+                       "elementType": "labels",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "arterial",
+                       "elementType": "geometry",
+                       "stylers": {
+                            "color": "#004981"
+                       }
+                  },
+                  {
+                       "featureType": "arterial",
+                       "elementType": "geometry.fill",
+                       "stylers": {
+                            "color": "#00508b"
+                       }
+                  },
+                  {
+                       "featureType": "poi",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "green",
+                       "elementType": "all",
+                       "stylers": {
+                            "color": "#056197",
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "subway",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "manmade",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "local",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "arterial",
+                       "elementType": "labels",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  },
+                  {
+                       "featureType": "boundary",
+                       "elementType": "geometry.fill",
+                       "stylers": {
+                            "color": "#029fd4"
+                       }
+                  },
+                  {
+                       "featureType": "building",
+                       "elementType": "all",
+                       "stylers": {
+                            "color": "#1a5787"
+                       }
+                  },
+                  {
+                       "featureType": "label",
+                       "elementType": "all",
+                       "stylers": {
+                            "visibility": "off"
+                       }
+                  }
+            ]
+        };
+
+    function load_map(id){
+        require(
+        [
+            'echarts',
+            'BMap',
+            'echarts/chart/map'
+        ],
+        function (echarts, BMapExtension) {
+            // 初始化地图
+            var BMapExt = new BMapExtension($('#main')[0], BMap, echarts,{
+                enableMapClick: false
+            });
+            var map = BMapExt.getMap();
+            var container = BMapExt.getEchartsContainer();
+
+            var startPoint = {
+                x: 104.114129,
+                y: 37.550339
+            };
+
+            var point = new BMap.Point(startPoint.x, startPoint.y);
+            map.centerAndZoom(point, 5);
+            map.enableScrollWheelZoom(true);
+            // 地图自定义样式
+            map.setMapStyle(mapstyle);
+
+
+            $.get('{% url "webanalysis:map_data" %}',{id:id},function(result){
+                //console.log(result);
+                option['series'][0]['geoCoord'] = result['result']['x'];
+                option['series'][0]['markLine']['data'] = result['result']['y'];
+                option['series'][0]['markPoint']['data'] = result['result']['z'];
+
+                console.log(option['series'][0]['geoCoord'] );
+                //console.log(result['result']['x'] );
+                console.log(option['series'][0]['markLine']['data'] );
+                //console.log(result['result']['y'] );
+                console.log(option['series'][0]['markPoint']['data'] );
+                //console.log(result['result']['z'] );
+                var myChart = BMapExt.initECharts(container);
+                window.onresize = myChart.onresize;
+                BMapExt.setOption(option);
+            },'json')
+
+
+        });
+    }
 
 
 
@@ -369,6 +552,7 @@
         //console.log($(this).find('a').html());
         load_pie(id);
         load_bar(id);
+        load_map(id)
     }
 
     function syncIps(){
@@ -386,7 +570,7 @@
 
 
     // 初始化地图
-/*
+    /*
     var BMapExt = new BMapExtension(document.getElementById('chart3'), BMap, require('echarts'), require('zrender'));
     var map = BMapExt.getMap();
     var container = BMapExt.getEchartsContainer();
@@ -400,6 +584,13 @@
     myChart = BMapExt.initECharts(container, curTheme);
     window.onresize = myChart.resize;
     BMapExt.setOption(option3, true)
+    */
 
-*/
+
+
+
+
+
+
+
 {% endblock %}

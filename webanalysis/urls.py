@@ -9,4 +9,5 @@ urlpatterns = [
     path('pie_data/', views.pie_data, name="pie_data"),
     path('bar_data/', views.bar_data, name="bar_data"),
     path('sync_ips/', views.sync_ips, name="sync_ips"),
+    path('map_data/', views.map_data, name="map_data"),
 ]

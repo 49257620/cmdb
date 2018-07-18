@@ -11,8 +11,8 @@ map.enableScrollWheelZoom(true);
 option = {
     color: ['gold','aqua','lime'],
     title : {
-        text: '模拟迁徙',
-        subtext:'数据纯属虚构',
+        text: '访问来源',
+        subtext:'',
         x:'right'
     },
     tooltip : {
