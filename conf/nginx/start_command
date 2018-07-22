@@ -1,0 +1,1 @@
+nginx -p /root/projects/django_study/cmdb_release -c conf/nginx/nginx.conf
