@@ -27,6 +27,7 @@ class APIView(View):
 class ViewClient(APIView):
 
     def post(self, request, *args, **kwargs):
+        print('is_ajax():',request.is_ajax())
         _ip = kwargs.get('ip', '')
         _json = self.get_json()
 
