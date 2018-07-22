@@ -55,4 +55,4 @@ class ViewResource(APIView):
         record.mem = _json.get('mem', 0)
         record.save()
 
-        return self.respones()
+        return self.respones(record.as_dict())
